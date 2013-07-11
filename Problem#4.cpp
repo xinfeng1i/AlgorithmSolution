@@ -51,11 +51,24 @@ int main()
     //cout << "234 is Palindrome? " << isPalindrome(234) << endl;
     //cout << "353 is Palindrome? " << isPalindrome(353) << endl;
     //cout << "999 is Palindrome? " << isPalindrome(999) << endl;
-    string s("ab");
-    cout << "s size:" << s.size() << endl;
-    size_t begin = 0;
-    size_t end = s.size() - 1;
-    string sub = s.substr(begin, s.size() - 2);
-    cout << "sub:" << sub << endl;
+
+    long long maxPalindrome = 0;
+    long long tmp = 0;
+    for (int i = 100; i <= 999; i++)
+    {
+        for (int j = 100;j <= 999; j++)
+        {
+            tmp = i * j;
+            if (isPalindrome(tmp))
+            {
+                if (tmp > maxPalindrome)
+                {
+                    maxPalindrome = tmp;
+                }
+            }
+        }
+    }
+    cout << "largest Palindrome:" << maxPalindrome << endl;
+
     return 0;
 }
