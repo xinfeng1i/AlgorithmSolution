@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-
+#include <ctime>
 using namespace std;
 
 /*
@@ -51,6 +51,7 @@ int main()
     //cout << "234 is Palindrome? " << isPalindrome(234) << endl;
     //cout << "353 is Palindrome? " << isPalindrome(353) << endl;
     //cout << "999 is Palindrome? " << isPalindrome(999) << endl;
+    clock_t begin = clock();
 
     long long maxPalindrome = 0;
     long long tmp = 0;
@@ -68,7 +69,11 @@ int main()
             }
         }
     }
+
+    clock_t end = clock();
+    double cost_time = (double)(end - begin) / CLOCKS_PER_SEC;
     cout << "largest Palindrome:" << maxPalindrome << endl;
+    cout << "TIME COST:" << cost_time << " s" << endl;
 
     return 0;
 }
