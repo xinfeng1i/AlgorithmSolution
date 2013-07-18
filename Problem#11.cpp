@@ -89,10 +89,12 @@ int main()
     cout << "positive diagonal" << endl;
 
     // find maxProduct from negative diagonal
-    for (size_t i = GRID_SIZE - 1; i >= 0; i--)
+    for (int i = GRID_SIZE - 1; i >= 0; i--)
     {
-        for (size_t j = 0; j < GRID_SIZE; j++)
+        for (int j = 0; j < GRID_SIZE; j++)
         {
+            // cannot use 'size_t i', cause 'size_t' is 'unsigned int'
+            // thus 'i-3' is a BIG NUMBER, not a negative number
             if (i - 3 >= 0 && j + 3 < GRID_SIZE)
             {
                 curProduct = grid[i][j] * grid[i-1][j+1] * grid[i-2][j+2] * grid[i-3][j+3];
