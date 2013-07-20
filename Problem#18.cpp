@@ -10,6 +10,8 @@ const int MATRIX_SIZE = 15;
 
 int main()
 {
+    clock_t time_begin = clock();
+
     int a[MATRIX_SIZE][MATRIX_SIZE] = {0};
 
     // open file, store matrix into array 'a'
@@ -31,16 +33,12 @@ int main()
         cerr << "Cannot Open File ! Please Check Your Filename" << endl;
     }
 
-    // output array to check correct
-    for (int i = 0; i < MATRIX_SIZE; i++)
-    {
-        for (int j = 0; j < MATRIX_SIZE; j++)
-        {
-            cout << a[i][j] << " ";
-        }
-        cout << endl;
-    }
-
+    /* Greedy Algorithm
+     * If we know the top to ith layer max path sum; for every number
+     * in i+1 th layer, we choose the max adjacent max path sum above, 
+     * add it the number. 
+     * we got the the top to i+1 th layer max path sum
+     */
     int maxPathSum[MATRIX_SIZE][MATRIX_SIZE] = {0};
     maxPathSum[0][0] = a[0][0];
     for (int i = 1; i < MATRIX_SIZE; i++)
@@ -49,33 +47,18 @@ int main()
         {
             int preLeftMaxPathSum = 0;
             int preMidMaxPathSum = 0;
-            int preRightMaxPathSum = 0;
             if (j - 1 >= 0)
             {
                 preLeftMaxPathSum = maxPathSum[i-1][j-1];
             }
             preMidMaxPathSum = maxPathSum[i-1][j];
-            if (j + 1 <= i)
-            {
-                preRightMaxPathSum = maxPathSum[i-1][j+1];
-            }
 
             int tmpMax = max(preLeftMaxPathSum, preMidMaxPathSum);
-            tmpMax = max(tmpMax, preRightMaxPathSum);
             
             maxPathSum[i][j] = a[i][j] + tmpMax;
         }
     }
 
-    cout << "The Max Path Sum Matrix:" << endl;
-    for (int i = 0; i < MATRIX_SIZE; i++)
-    {
-        for (int j = 0; j < MATRIX_SIZE; j++)
-        {
-            cout << maxPathSum[i][j] << " ";
-        }
-        cout << endl;
-    }
     
     cout << "The Last Row:" << endl;
     int result = 0;
@@ -88,6 +71,10 @@ int main()
         }
     }
     cout << endl;
-    cout << "Result: " << result << endl;
+    cout << "The Max Path Sum: " << result << endl;
+
+    clock_t time_end = clock();
+    double time_cost = (double)(time_end - time_begin) / CLOCKS_PER_SEC;
+    cout << "TIME COST: " << time_cost << " s" << endl;
     return 0;
 }
