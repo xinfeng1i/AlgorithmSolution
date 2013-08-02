@@ -3,6 +3,7 @@
 #include <set>
 #include <cmath>
 #include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
@@ -27,43 +28,35 @@ bool isPrime(long n)
     }
 }
 
-long rotation(long  n)
+long rotation(long  n, long step)
 {
     string str_n = to_string(n);
     int length = str_n.size();
+
+    string str_beg = str_n.substr(step, length-step);
+    string str_end = str_n.substr(0, step);
+    string result = str_beg + str_end;
+    return atol(result.c_str());
     
-    char tmp = str_n[0];
-    for (int i = 1; i < length; i++)
-    {
-        str_n[i-1] = str_n[i];
-    }
-    str_n[length - 1] = tmp;
-    long result = atol(str_n.c_str());
-    return result;
 }
 
 bool isCircularPrime(long n)
 {
-    string str_n = to_string(n);
-    int length = str_n.size();
-    int i = 0;
-    for (i = 0; i < length; i++)
-    {
-        if (!isPrime(n))
-        {
-            break;
-        }
-        n = rotation(n);
-    }
-
-    if (i < length)
+    if (!isPrime(n))
     {
         return false;
     }
-    else
+    int length = to_string(n).size();
+    for (int step = 1; step <= length - 1; step++)
     {
-        return true;
+        if (!isPrime(rotation(n, step)))
+        {
+            return false;
+        }
     }
+
+    return true;
+
 }
 
 long numCircularPrimeUnder(long bound)
@@ -73,7 +66,7 @@ long numCircularPrimeUnder(long bound)
     {
         if (isCircularPrime(i))
         {
-            cout << " == " << i << endl;
+            cout << " Circular Primes Under " << bound << " : "<< i << endl;
             cnt++;
         }
     }
@@ -81,6 +74,10 @@ long numCircularPrimeUnder(long bound)
 }
 int main()
 {
+    clock_t time_begin = clock();
     cout << numCircularPrimeUnder(1000000) << endl;
+    clock_t time_end = clock();
+    double time_cost = (double)(time_end - time_begin) / CLOCKS_PER_SEC;
+    cout << "TIME COST: " << 1000 * time_cost << " ms" << endl;
     return 0;
 }
