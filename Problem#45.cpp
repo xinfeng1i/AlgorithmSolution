@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <ctime>
 
 using namespace std;
 
@@ -22,6 +23,8 @@ long long genHexagonal(long long n)
 
 int main()
 {
+    clock_t time_begin = clock();
+
     vector<long long> tvec;
     vector<long long> pvec;
     vector<long long> hvec;
@@ -42,5 +45,8 @@ int main()
         }
     }
 
+    clock_t time_end = clock();
+    double time_cost = (double)(time_end - time_begin) / CLOCKS_PER_SEC;
+    cout << "TIME COST: " << time_cost * 1000 << " ms" << endl;
     return 0;
 }
