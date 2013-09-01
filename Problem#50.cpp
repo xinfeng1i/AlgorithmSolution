@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <numeric>
 
 using namespace std;
 
@@ -22,6 +23,7 @@ bool isPrime(long n)
     return true;
 }
 
+
 int main()
 {
     const long UP_BOUND = 1000000;
@@ -40,7 +42,37 @@ int main()
     cout << "size: " << primes.size() << endl;
     cout << primes[0] << endl;
     cout << primes[primes.size()-1] << endl;
+    cout << primes[primes.size()-2] << endl;
+    cout << primes[primes.size()-3] << endl;
+    cout << primes[primes.size()-4] << endl;
+    cout << primes[primes.size()-5] << endl;
 
+    /*
+    long max_prime_con_sum_length = 0;
+    for (long i = 0; i < primes.size(); i++)
+    {
+        long prime = primes[i];
+        long prime_con_sum_length = 0;
+
+        vector<long>::iterator it_beg, it_end;
+        for(it_end == primes.begin(); it_end != primes.end(); it_end++)
+        {
+            long tmp = accumulate(primes.begin(), it_end, 0) 
+            if (tmp > prime)
+            {
+                prime_con_sum_length = 0; 
+                break;
+            }
+            else if (tmp == prime)
+            {
+                prime_con_sum_length = it_end - primes.begin();
+                break;
+            }
+        }
+    }
+    */
+
+    /*
     long max_max_cnt = 0;
     for (long i = 0; i < primes.size(); i++)
     {
@@ -61,6 +93,7 @@ int main()
                 if (cnt > max_cnt)
                 {
                     max_cnt = cnt;
+                    break;
                 }
             }
 
@@ -72,5 +105,17 @@ int main()
         }
     }
     cout << "max_max_cnt: " << max_max_cnt << endl;
+    */
+    cout << "====================" << endl;
+    long up_bd = 546;
+    for (long up_bd = 550; up_bd >= 500; up_bd--)
+    {
+        cout << "up_bd: " << up_bd << " ::: " << endl;
+        long tmp =  accumulate(primes.begin()+3, primes.begin() + up_bd, 0);
+        if (isPrime(tmp))
+        {
+            cout << tmp <<endl;
+        }
+    }
     return 0;
 }
