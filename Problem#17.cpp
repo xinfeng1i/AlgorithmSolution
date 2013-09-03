@@ -5,10 +5,15 @@ using namespace std;
 
 int cntLetters(int number)
 {
-    if (number <= 0 || number > 1000)
+    if (number < 0 || number > 1000)
     {
         cerr << "Parameter Wrong! " << endl;
         return -1;
+    }
+
+    if (number == 0)
+    {
+        return 0;
     }
 
     if (number <= 10)
@@ -86,13 +91,34 @@ int cntLetters(int number)
 
         }
     }
-    o
+    else if (number <= 999)
+    {
+        // 100, 200, 300, ... 900, not include "and"
+        if (number % 100 == 0)
+        {
+            return cntLetters(number / 100) + 7;
+        }
+        else    // 134,345... and so on, include "and"
+        {
+            return cntLetters(number / 100) + 7 + 3 + cntLetters(number % 100); 
+        }
+    }
+
+    else if (number == 1000)
+    {
+        return 3 + 8;
+    }
 }
 
 int main()
 {
-    for (int i = 1; i <= 10; i++)
+    int letter_count = 0;
+    for (int i = 1; i <= 1000; i++)
     {
-        cout << cntLetters(i) << endl;
+        letter_count += cntLetters(i);
     }
+
+    cout << "All Letters Count between 1 and 1000 is :" 
+        << letter_count << endl;
+    return 0;
 }
