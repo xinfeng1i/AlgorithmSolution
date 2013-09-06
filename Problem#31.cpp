@@ -1,45 +1,84 @@
+/* 
+ * Filename :coins.cpp
+ * Description: solve coin combinations using dynamic programing
+ * Complier: g++
+ * Author: python27
+ */
 #include <iostream>
 #include <string>
+#include <cmath>
 #include <vector>
+
 using namespace std;
 
-int coins[8] = {1, 2, 5, 10, 20, 50, 100, 200};
-/*
- * Dynamic Programming
+/****************************************************************
+ * coin Combinations: using dynamic programming
  *
- * dp[i][j] = using the first i kinds of coins to construct sum j
- * then dp[i][j] = dp[i-1][j - k * coins[i - 1]], k = 0, 1, ... ,j / coins[i-1]
+ * Basic idea:
+ * dp[i][j] = sum(dp[i-1][j-k*coins[i-1]]) for k = 1,2,..., j/coins[i-1]
+ * dp[0][j] = 1 for j = 0, 1, 2, ..., sum
+ * 
+ * Input:
+ * coins[] - array store all values of the coins
+ * coinKinds - how many kinds of coins there are
+ * sum - the number you want to construct using coins
  *
- * init
- * dp[i][0] = 1, where i = 0, 1, 2, ... ,8
- */
-int main()
+ * Output:
+ * the number of combinations using coins construct sum
+ *
+ * Usage:
+ * c[3] = {1, 2, 5};
+ * int result = coinCombinations(c, 3, 10);
+ *
+ ****************************************************************/
+int coinCombinations(int coins[], int coinKinds, int sum)
 {
-    int dp[9][201] = {0};
-    //init
-    for (int i = 0; i < 9; ++i)
+    // 2-D array using vector: is equal to: dp[coinKinds+1][sum+1] = {0};
+    vector<vector<int> > dp(coinKinds + 1);
+    for (int i = 0; i <= coinKinds; ++i)
+    {
+        dp[i].resize(sum + 1);
+    }
+    for (int i = 0; i <= coinKinds; ++i)
+    {
+        for (int j = 0; j <= sum; ++j)
+        {
+            dp[i][j] = 0;
+        }
+    }
+
+    //init: dp[i][0] = 1; i = 0, 1, 2 ..., coinKinds
+    //Notice: dp[0][0] must be 1, althongh it make no sense that
+    //using 0 kinds of coins construct 0 has one way. but it the foundation
+    //of iteration. without it everything based on it goes wrong
+    for (int i = 0; i <= coinKinds; ++i)
     {
         dp[i][0] = 1;
     }
 
-    for (int i = 1; i < 9; ++i)
+    // iteration: dp[i][j] = sum(dp[i-1][j - k*coins[i-1]])
+    // k = 0, 1, 2, ... , j / coins[i-1]
+    for (int i = 1; i <= coinKinds; ++i)
     {
-        for (int j = 1; j < 201; ++j)
+        for (int j = 1; j <= sum; ++j)
         {
-            int n = j / coins[i-1];
-            int tmp = 0;
-            for (int d = 0; d <= n; ++d)
+            dp[i][j] = 0;
+            for (int k = 0; k <= j / coins[i-1]; ++k)
             {
-                tmp += dp[i-1][j - coins[i-1]*d];
+                dp[i][j] += dp[i-1][j - k * coins[i-1]];
             }
-            dp[i][j] = tmp;
         }
     }
 
-    cout << "the number of ways using 8 coins to make is : "
-        << dp[8][200] << endl;
-
-    return 0;
+    return dp[coinKinds][sum];
 }
 
-
+int main()
+{
+    int coins[8] = {1, 2, 5, 10, 20, 50, 100, 200};
+    int sum = 200;
+    int result = coinCombinations(coins, 8, 200);
+    cout << "using 8 kinds of coins construct 200, combinations are: " << endl;
+    cout << result << endl;
+    return 0;
+}
