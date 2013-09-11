@@ -35,14 +35,7 @@ int numOfCubicPermutations(long n)
 bool isCubicNumber(long n)
 {
     long cubic_root = static_cast<long>(cbrt(static_cast<double>(n)));
-    if (cubic_root * cubic_root * cubic_root == n)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return cubic_root * cubic_root * cubic_root == n;
 }
 
 int main()
@@ -51,7 +44,7 @@ int main()
     long i = LOW_BOUND;
     while (true)
     {
-       if (isCubicNumber(i) && numOfCubicPermutations(i) == 5)
+       if (isCubicNumber(i) && numOfCubicPermutations(i) == 4)
        {
             cout << "result: " << i << endl;
             break;
