@@ -32,7 +32,8 @@ bool isnthPower(long long n)
 int main()
 {
     long long cnt = 0;
-    for (long long i = 1; i <= numeric_limits<long long>::max(); ++i)
+    //i <= numeric_limits<long long>::max()
+    for (long long i = 1; i < 200000000; ++i)
     {
         if (isnthPower(i))
         {
