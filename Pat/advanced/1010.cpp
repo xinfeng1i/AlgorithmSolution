@@ -51,17 +51,26 @@ int main()
 
     unsigned long long decimalN2 = 0;
     int tmpRadix = minN2Radix;
-    for (; tmpRadix <= MAX_RADIX; ++tmpRadix)
+    bool found = false;
+    while (true)
     {
-        decimalN2 = toDecimalNumber(N2, tmpRadix); 
+        decimalN2 = toDecimalNumber(N2, tmpRadix);
         if (decimalN2 == decimalN1)
         {
+            found = true;
             break;
         }
+        else if (decimalN2 > decimalN1)
+        {
+            found = false;
+            break;
+        }
+
+        tmpRadix++;
     }
 
     // find radix for N2 s.t. N2 == N1
-    if (tmpRadix <= MAX_RADIX)
+    if (found)
     {
         cout << tmpRadix << endl;
     }
