@@ -2,8 +2,8 @@
 #include <string>
 #include <algorithm>
 #include <cmath>
+#include <climits>
 using namespace std;
-const int MAX_RADIX = 36;
 
 unsigned long long toDecimalNumber(string s, int radix)
 {
@@ -49,25 +49,54 @@ int main()
         minN2Radix = (*pmaxDigit - 'a' + 10) + 1;
     }
 
+#if 1
     unsigned long long decimalN2 = 0;
-    int tmpRadix = minN2Radix;
+    unsigned long long tmpRadix = minN2Radix;
     bool found = false;
     while (true)
     {
         decimalN2 = toDecimalNumber(N2, tmpRadix);
+        if (decimalN2 < decimalN1)
+        {
+            tmpRadix++;
+        }
+        else if (decimalN2 == decimalN1)
+        {
+            found = true;
+            break;
+        }
+        else
+        {
+            found = false;
+            break;
+        }
+    }
+#endif 
+
+#if 0
+    unsigned long long decimalN2 = 0;
+    unsigned long long maxN2Radix = ULLONG_MAX;
+    unsigned long long midN2Radix = 0;
+    bool found = false;
+    while (minN2Radix <= maxN2Radix)
+    {
+        midN2Radix = (minN2Radix + maxN2Radix) / 2;
+        decimalN2 = toDecimalNumber(N2, midN2Radix);
         if (decimalN2 == decimalN1)
         {
             found = true;
             break;
         }
-        else if (decimalN2 > decimalN1)
+        else if (decimalN2 < decimalN1)
         {
-            found = false;
-            break;
+            minN2Radix = midN2Radix + 1;
         }
-
-        tmpRadix++;
+        else
+        {
+            maxN2Radix = minN2Radix  - 1;
+        }
     }
+#endif
 
     // find radix for N2 s.t. N2 == N1
     if (found)
