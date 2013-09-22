@@ -24,16 +24,16 @@ bool isPrime(long long n)
  * Reverse number in radix-d number system,
  * recover the decimal value as return value
  *
- * Input
+ * Input:
  *  n - the number to be reversed
  *  d - radix
- *
- * Output
+ * Output:
  *  return the reverse number in decimal number system
  *
- * Example
+ * Example:
  *   23 = (10111)   // binary system
- *   (11101) = 29   // reverse in the binary system,calculate the decimal value
+ *   (11101) = 29   // reverse in the binary system
+ *                  // calculate the decimal value
  *   return 29
  *
  *****************************************************************************/
