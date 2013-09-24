@@ -119,8 +119,29 @@ struct phoneRecord
     }
 };
 
-int caculateToll(dateTime beg_time, int total_time, int a[24])
+int caculateToll(dateTime beg_time, dateTime end_time, int total_time, int a[24])
 {
+    if (beg_time.date_ == end_time.date_ && beg_time.hour_ == end_time.hour_)
+    {
+        return a[beg_time.hour_] * (end_time.minute - begin_time.minute_);
+    }
+    else //if (beg_time.date_ == end_time.date_ && beg_time.hour_ != end_time.hour_)
+    {
+        int sum = a[beg_time.hour_] * (60 - beg_time.minute_);
+        int cur_hour = beg_time.hour;
+        total_time -= (60 - beg_time.minute_);
+        cur_hour = (cur_hour + 1) % 24;
+        while (total_time > 60)
+        {
+            sum += a[cur_hour] * 60;
+            total_time -= 60;
+            cur_hour = (cur_hour + 1) % 24;
+        }
+        
+        sum += a[cur_hour] * total_time;
+
+        return sum;
+    }
 }
 
 int main()
