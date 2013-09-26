@@ -52,6 +52,7 @@ bool compareByGrade(const Student& lhs, const Student& rhs)
 
 int main()
 {
+    ios::sync_with_stdio(false);
 	long N = 0;
 	int C = 0;
 	cin >> N >> C;
