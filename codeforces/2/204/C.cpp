@@ -12,53 +12,42 @@ using namespace std;
 
 int main()
 {
-   int n = 0;
-   cin >> n;
-   double tmp;
-   vector<double> floats;
-   for (int i = 0; i < 2 * n; ++i)
-   {
-        cin >> tmp;
-        if ( abs(tmp - static_cast<long>(tmp)) > EPS )
-        {
-            floats.push_back(tmp - static_cast<long>(tmp));
-        }
-   }
+    int n = 0;
+    scanf("%d", &n);
+    double x = 0.0;
+    double s1 = 0.0;
+    long long s2 = 0;
+    int cnt = 0;
+    for (int i = 0; i < 2 * n; ++i)
+    {
+        scanf("%lf", &x);
+        s1 += x;
+        s2 += (int)x;
 
-   sort(floats.begin(), floats.end(),less<double>());
+        // cnt - count the number of integers
+        if (x - (int)x < EPS)
+        {
+            cnt++;
+        }
+    }
 
-   double ans = 0;
-   long sz = floats.size();
-   if (sz % 2 == 0)
-   {
-        for (long i = 0; i < sz / 2; ++i)
-        {
-            ans += -floats[i] + (1 - floats[sz-1-i]);
-        }
-   }
-   else
-   {
-        for (long i = 0; i < sz / 2; ++i)
-        {
-            ans += -floats[i] + (1 - floats[sz-1-i]);
-        }
-        if (ans > 0)
-        {
-            ans = ans - floats[sz/2];
-        }
-        else if (ans < 0)
-        {
-            ans = ans + (1 - floats[sz/2]);
-        }
-        else if (ans == 0)
-        {
-            
-            ans = min(abs(floats[sz/2]), abs(1 - floats[sz/2]));
-        }
+    long long smin = s2 + (cnt < n ? (n - cnt) : 0);
+    long long smax = s2 + (cnt < n ? n : (2 * n - cnt));
 
-   }
-   
-   //cout << abs(ans) << endl;
-   printf ("%0.3f\n", abs(ans));
-   return 0;
+    double ans = 1e9;
+    for (long long i = smin; i <= smax; ++i)
+    {
+        ans = min(ans, abs(s1 - i));
+    }
+
+    printf("%0.3f\n", ans);
+    return 0;
 }
+
+// Summary:
+// 1. Main idea find the mimimum integer and max integer after the round down
+//    round up, it can take. discuss the two different conditions
+// 2. Involve large amount of I/O, use scanf/printf
+//
+// Created by python27
+// 2013/10/07
