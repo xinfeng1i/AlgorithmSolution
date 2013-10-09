@@ -3,82 +3,72 @@
 #include <vector>
 #include <algorithm>
 #include <cstdio>
+#include <cstring>
 using namespace std;
 
 struct Student
 {
-	string id_;
-	string name_;
-	int grade_;
+    long id_;
+    char name_[9];
+    int grade_;
 };
 
-
-bool compareById(const Student& lhs, const Student& rhs)
+inline bool compareById(const Student& a, const Student& b)
 {
-	return lhs.id_ < rhs.id_;
+    return a.id_ < b.id_;
 }
 
-bool compareByName(const Student& lhs, const Student& rhs)
+bool compareByName(const Student& a, const Student& b)
 {
-	if (lhs.name_ < rhs.name_)
-	{
-		return true;
-	}
-	else if(lhs.name_ == rhs.name_)
-	{
-		return lhs.id_ < rhs.id_;
-	}
-	else
-	{
-		return false;
-	}
+    if (strcmp(a.name_, b.name_) != 0)
+    {
+        return strcmp(a.name_, b.name_) < 0;
+    }
+    else
+    {
+        return a.id_ < b.id_;
+    }
 }
 
-bool compareByGrade(const Student& lhs, const Student& rhs)
+bool compareByGrade(const Student& a, const Student& b)
 {
-	if (lhs.grade_ < rhs.grade_)
-	{
-		return true;
-	}
-	else if (lhs.grade_ == rhs.grade_)
-	{
-		return lhs.id_ < rhs.id_;
-	}
-	else
-	{
-		return false;
-	}
+    if (a.grade_ != b.grade_)
+    {
+        return a.grade_ < b.grade_;
+    }
+    else
+    {
+        return a.id_ < b.id_;
+    }
 }
 
 int main()
 {
-    ios::sync_with_stdio(false);
-	long N = 0;
-	int C = 0;
-	cin >> N >> C;
-	vector<Student> v(N);
-	for (long i = 0; i < N; ++i)
-	{
-		cin >> v[i].id_ >> v[i].name_ >> v[i].grade_;
-	}
+    long n = 0;
+    int c = 0;
+    scanf("%ld %d", &n, &c);
 
-	switch (C)
-	{
-		case 1: sort(v.begin(), v.end(), compareById);
-				break;
-		case 2: sort(v.begin(), v.end(), compareByName);
-				break;
-		case 3: sort(v.begin(), v.end(), compareByGrade);
-				break;
-		default: cerr << "Parameter wrong" << endl;
-				break; 
-	}
+    vector<Student> v(n);
+    for (long i = 0; i < n; ++i)
+    {
+        scanf("%ld %s %d", &(v[i].id_), v[i].name_, &(v[i].grade_));
+    }
 
-	for (long i = 0; i < N; ++i)
-	{
-		cout << v[i].id_ << " " << v[i].name_ << " " << v[i].grade_ << endl;
-		//printf("%s %s %d", v[i].id_, v[i].name_, v[i].grade_);
-	}
-
-	return 0;
+    switch (c)
+    {
+        case 1: sort(v.begin(), v.end(), compareById);
+                break;
+        case 2: sort(v.begin(), v.end(), compareByName);
+                break;
+        case 3: sort(v.begin(), v.end(), compareByGrade);
+                break;
+        default:printf("parameter wrong\n");
+                break;
+    }
+    
+    for (long i = 0; i < n; ++i)
+    {
+        printf("%06ld %s %d\n", v[i].id_, v[i].name_, v[i].grade_);
+    }
+    return 0;
 }
