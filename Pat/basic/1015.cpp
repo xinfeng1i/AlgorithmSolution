@@ -1,144 +1,94 @@
 #include <iostream>
-#include <vector>
-#include <set>
 #include <string>
+#include <vector>
 #include <algorithm>
-#include <fstream>
+#include <cstdio>
+#include <cstring>
 using namespace std;
 
-struct Student
+struct Man
 {
-public:
-    long examId_;
-    int character_;
-    int ability_;
-public:
-    // constructor
-    Student():examId_(10000000), character_(0), ability_(0)
-    {}
+    long id_;
+    int virtue_;
+    int talent_;
+    int degree_;
+};
 
-    // constructor
-    Student(long id, int character, int ability):examId_(id),
-                                                 character_(character),
-                                                 ability_(ability)
-    {}
-
-    // destructor
-    ~Student()
-    {}
-
-    // overload operator<
-    bool operator<(const Student& rhs) const
+int getDegree(int virtue, int talent, int h)
+{
+    if (virtue >= h && talent >=h)
     {
-        if (character_ + ability_ > rhs.character_ + rhs.ability_)
+        return 1;
+    }
+    else if (virtue >= h && talent < h)
+    {
+        return 2;
+    }
+    else if (virtue < h && talent < h && virtue >= talent)
+    {
+        return 3;
+    }
+    else
+    {
+        return 4;
+    }
+}
+
+bool compareMan(const Man& a, const Man& b)
+{
+    if (a.degree_ != b.degree_)
+    {
+        return a.degree_ < b.degree_;
+    }
+    else
+    {
+        if (a.virtue_ + a.talent_ != b.virtue_ + b.talent_)
         {
-            return true;
-        }
-        else if (character_ + ability_ == rhs.character_ + rhs.ability_)
-        {
-            if (character_ > rhs.character_)
-            {
-                return true;
-            }
-            else if (character_ < rhs.character_)
-            {
-                return false;
-            }
-            else if ( character_ == rhs.character_)
-            {
-                return examId_ < rhs.examId_;
-            }
+            return a.virtue_ + a.talent_ > b.virtue_ + b.talent_;
         }
         else
         {
-            return false;
+            if (a.virtue_ != b.virtue_)
+            {
+                return a.virtue_ > b.virtue_;
+            }
+            else
+            {
+                return a.id_ < b.id_;
+            }
         }
     }
-    
-    void printStudent() const
-    {
-        cout << examId_ << " " << character_ << " " << ability_ << endl;
-    }
-};
+
+}
 
 int main()
 {
-    long N = 0;
-    int L = 0;
-    int H = 0;
-#if 1
-    ifstream fin("1015data.txt", ios::in);
-    if (!fin.is_open())
-    {
-        cerr << "cannot open" << endl;
-        return -1;
-    }
-#endif
-    fin >> N >> L >> H;
+    //freopen("1015data.txt", "r", stdin);
 
-    vector<Student> v(N);
-    for (long i = 0; i < N; ++i)
-    {
-        fin >> v[i].examId_ >> v[i].character_ >> v[i].ability_;
-    }
+    long n;
+    int low, high;
+    scanf("%ld %d %d", &n, &low, &high);
 
-    set<Student> v1;
-    set<Student> v2;
-    set<Student> v3;
-    set<Student> v4;
-    for (long i = 0; i < N; ++i)
+    vector<Man> v;
+    v.reserve(100000);
+    Man man;
+    for (long i = 0; i < n; ++i)
     {
-        if (v[i].character_ < L || v[i].ability_ < L)
+        scanf("%ld %d %d", &man.id_, &man.virtue_, &man.talent_);
+        if (man.virtue_ >= low && man.talent_ >= low)
         {
-            continue;
-        }
-
-        if (v[i].character_ >= H && v[i].ability_ >= H)
-        {
-            v1.insert(v[i]);
-        }
-        else if (v[i].character_ >= H && v[i].ability_ < H)
-        {
-            v2.insert(v[i]);
-        }
-        else if (v[i].character_ < H && v[i].ability_ < H 
-                                     && v[i].character_ >= v[i].ability_)
-        {
-            v3.insert(v[i]);
-        }
-        else
-        {
-            v4.insert(v[i]);
+            man.degree_ = getDegree(man.virtue_, man.talent_, high);
+            v.push_back(man);
         }
     }
-#if 0
-    sort(v1.begin(), v1.end());
-    sort(v2.begin(), v2.end());
-    sort(v3.begin(), v3.end());
-    sort(v4.begin(), v4.end());
-#endif
 
-    long M = v1.size() + v2.size() + v3.size() + v4.size();
-    cout << M << endl;
-    for (auto it = v1.begin(); it != v1.end(); ++it)
+    sort(v.begin(), v.end(), compareMan);
+
+    long sz = v.size();
+    printf("%ld\n", sz);
+    for (long i = 0; i < sz; ++i)
     {
-        it->printStudent();
+        printf("%08ld %d %d\n", v[i].id_, v[i].virtue_, v[i].talent_);
     }
-
-    for (auto it = v2.begin(); it != v2.end(); ++it)
-    {
-        it->printStudent();
-    }
-
-    for (auto it = v3.begin(); it != v3.end(); ++it)
-    {
-        it->printStudent();
-    }
-
-    for (auto it = v4.begin(); it != v4.end(); ++it)
-    {
-        it->printStudent();
-    }
-
     return 0;
 }
