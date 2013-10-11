@@ -53,31 +53,6 @@ int main()
             printf("\n");
         }
     }
-    
-/*
-    string queryName;
-    for (long i = 0; i < queryNumber; ++i)
-    {
-        queryName = querylist[i];
-        int registerNumber = table[queryName].size();
-        cout << queryName << " " << registerNumber;
-        if (registerNumber == 0)
-        {
-            //cout << endl;
-            printf("\n");
-        }
-        else
-        {
-            for (auto it = table[queryName].begin(); 
-                      it != table[queryName].end(); ++it)
-            {
-                //cout << " " << *it;
-                printf(" %d", *it);
-            }
-            //cout << endl;
-            printf("\n");
-        }
-    }
-*/
+
     return 0;
 }
