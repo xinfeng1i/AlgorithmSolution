@@ -8,38 +8,42 @@ using namespace std;
 
 int main()
 {
-    freopen("1057data.txt", "r", stdin);
+    freopen("input.txt", "r", stdin);
 
     long n;
-    cin >> n;
+    scanf("%ld", &n);
 
     stack<long> S;
     multiset<long> ordered;
-    string input;
+    char input[20];
     long key;
     for (long i = 0; i < n; ++i)
     {
-        cin >> input;
-        if (input == "Push")
+        scanf("%s", input);
+
+        // push operation
+        if (input[1] == 'u')
         {
-            cin >> key;
+            scanf("%ld", &key);
             S.push(key);
             ordered.insert(key);
         }
-        else if (input == "Pop")
+        // pop operation
+        else if (input[1] == 'o')
         {
             if (S.size() <= 0)
             {
-                cout << "Invalid" << endl;
+                printf("Invalid\n");
             }
             else
             {
-                cout << S.top() << endl;
+                printf("%ld\n", S.top());
                 ordered.erase(S.top());
                 S.pop();
             }
         }
-        else if (input == "PeekMedian")
+        // peek median
+        else if (input[1] == 'e')
         {
             long mid;
             if (S.size() % 2 == 0)
@@ -53,7 +57,7 @@ int main()
             
             if (mid <= 0)
             {
-                cout << "Invalid" << endl;
+                printf("Invalid\n");
             }
             else
             {
@@ -64,8 +68,7 @@ int main()
                     it++;
                     cur++;
                 }
-                cout << *it << endl;
-                //ordered.erase(it);
+                printf("%ld\n", *it);
             }
         }
     }
