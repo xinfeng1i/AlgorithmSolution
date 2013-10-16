@@ -28,7 +28,10 @@ int main()
     players[round[m].x] = 0;
     for (long k = m - 1; k >= 1; --k)
     {
-        players[round[k].x] = round[k + 1].x;
+        if (players[round[k].x] == -1)
+        {
+            players[round[k].x] = round[k + 1].x;
+        }
     }
 
     for (long k = 1; k <= m; ++k)
