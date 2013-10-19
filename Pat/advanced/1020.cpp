@@ -6,6 +6,12 @@
 using namespace std;
 #define N 35
 
+struct Node
+{
+    int data_;
+    Node* left_;
+    Node* right_;
+};
 
 int post_order[N];
 int in_order[N];
@@ -75,6 +81,7 @@ void createdTree(int root, int n)
 
     if (left_root != root)
     {
+        cout << "push left:" << left_root << endl;
         q.push(left_root);
     }
 
@@ -92,6 +99,7 @@ void createdTree(int root, int n)
 
     if (right_root != root)
     {
+        cout << "push right: " << right_root << endl;
         q.push(right_root);
     }
 
