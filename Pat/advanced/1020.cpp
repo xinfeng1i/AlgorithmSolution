@@ -34,6 +34,9 @@ int getPosInPost(int elem, int n)
 // push left and right child of root into queue
 void createdTree(Node* &proot,int root, int n)
 {
+    Node* new_node = new Node(root);
+    proot = new_node;
+
     // find root in the in_order array
     int i = 0;
     for (i = 0; i < n; ++i)
@@ -81,11 +84,11 @@ void createdTree(Node* &proot,int root, int n)
         }
     }
 
-    if (left_root != root)
-    {
-        Node* newnode = new Node(left_root);
-        proot->left_ = newnode;
-    }
+    //if (left_root != root)
+    //{
+    //   Node* newnode = new Node(left_root);
+    //   proot->left_ = newnode;
+    //}
 
     // find the root the right subtree
     int right_root = in_order[right_most];
@@ -99,11 +102,11 @@ void createdTree(Node* &proot,int root, int n)
         }
     }
 
-    if (right_root != root)
-    {
-        Node* newnode = new Node(right_root);
-        proot->right_ = newnode;
-    }
+    //if (right_root != root)
+    //{
+    //    Node* newnode = new Node(right_root);
+    //    proot->right_ = newnode;
+    //}
 
     if (left_root != root)
     {
@@ -133,6 +136,12 @@ int main()
     {
         visited[i] = 0;
     }
+    
+    if (n <= 0)
+    {
+        cout << endl;
+        return 0;
+    }
 
     if (n == 1)
     {
@@ -140,12 +149,15 @@ int main()
         return 0;
     }
    
-    Node* root = new Node(post_order[n-1]);
+    Node* root;
     createdTree(root, post_order[n-1], n);
 
     bool flag = false;
     queue<Node*> q;
-    q.push(root);
+    if (root != NULL)
+    {
+        q.push(root);
+    }
     while (!q.empty())
     {
         if (flag)
