@@ -11,12 +11,14 @@ struct Node
     int data_;
     Node* left_;
     Node* right_;
+    
+    Node(int data):data_(data), left_(NULL), right_(NULL)
+    {}
 };
 
 int post_order[N];
 int in_order[N];
 int visited[N];
-queue<int> q;
 
 int getPosInPost(int elem, int n)
 {
@@ -30,7 +32,7 @@ int getPosInPost(int elem, int n)
 }
 
 // push left and right child of root into queue
-void createdTree(int root, int n)
+void createdTree(Node* &proot,int root, int n)
 {
     // find root in the in_order array
     int i = 0;
@@ -81,8 +83,8 @@ void createdTree(int root, int n)
 
     if (left_root != root)
     {
-        cout << "push left:" << left_root << endl;
-        q.push(left_root);
+        Node* newnode = new Node(left_root);
+        proot->left_ = newnode;
     }
 
     // find the root the right subtree
@@ -99,17 +101,17 @@ void createdTree(int root, int n)
 
     if (right_root != root)
     {
-        cout << "push right: " << right_root << endl;
-        q.push(right_root);
+        Node* newnode = new Node(right_root);
+        proot->right_ = newnode;
     }
 
     if (left_root != root)
     {
-        createdTree(left_root, n);
+        createdTree(proot->left_,left_root, n);
     }
     if (right_root != root)
     {
-        createdTree(right_root, n);
+        createdTree(proot->right_, right_root, n);
     }
 }
 
@@ -131,11 +133,19 @@ int main()
     {
         visited[i] = 0;
     }
+
+    if (n == 1)
+    {
+        cout << post_order[0] << endl;
+        return 0;
+    }
    
-    q.push(post_order[n-1]);
-    createdTree(post_order[n-1], n);
+    Node* root = new Node(post_order[n-1]);
+    createdTree(root, post_order[n-1], n);
 
     bool flag = false;
+    queue<Node*> q;
+    q.push(root);
     while (!q.empty())
     {
         if (flag)
@@ -146,10 +156,18 @@ int main()
         {
             flag = true;
         }
-        cout << q.front();
-
+        cout << q.front()->data_;
+        if (q.front()->left_ != NULL)
+        {
+            q.push(q.front()->left_);
+        }
+        if (q.front()->right_ != NULL)
+        {
+            q.push(q.front()->right_);
+        }
+        delete q.front();
         q.pop();
     }
     cout << endl;
-    
+    return 0;
 }
