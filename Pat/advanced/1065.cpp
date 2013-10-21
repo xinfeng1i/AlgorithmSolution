@@ -97,7 +97,6 @@ void BigInt::printBigInt()
     }
 }
 
-#if 1
 BigInt operator+(const BigInt& aa, const BigInt& bb)
 {
     BigInt ans("0");
@@ -164,7 +163,6 @@ BigInt operator+(const BigInt& aa, const BigInt& bb)
     }
     return ans;
 }
-#endif
 
 
 int main()
@@ -192,4 +190,48 @@ int main()
     return 0;
 }
 
+// Method 2: other's elegant code
+#if 0
+#include <iostream>
+#include <string>
+using namespace std;
 
+int main()
+{
+    int n;
+    cin >> n;
+    long long a, b, c;
+    for (int i = 0; i < n; ++i)
+    {
+        cin >> a >> b >> c;
+        long long a1 = a / 3;
+        long long b1 = b / 3;
+        long long c1 = c / 3;
+        long long r1 = a % 3;
+        long long r2 = b % 3;
+        long long r3 = c % 3;
+        long long sum1 = a1 + b1 + (r1 + r2) / 3;
+        long long sum2 = (r1 + r2) % 3;
+        if (sum1 > c1 || sum1 == c1 && sum2 > r3)
+        {
+            cout << "Case #" << i + 1 << ": true" << endl;
+        }
+        else
+        {
+            cout << "Case #" << i + 1 << ": false" << endl;
+        }
+    }
+
+    return 0;
+
+}
+#endif
+
+
+// Summary:
+// 1. This problem seems that you need implement a self-defined BinInt
+//    class, but in fact you really need
+// 2. you only need to worry about the largest and smallest bound value.
+// 3. other's code main idea:
+//    since we want to juege whether:   a + b > c
+//    it is equivalent with:            (a + b) / 3 > c / 3
