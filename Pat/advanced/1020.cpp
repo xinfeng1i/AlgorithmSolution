@@ -1,172 +1,90 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <queue>
 #include <algorithm>
+#include <queue>
 using namespace std;
-#define N 35
 
-struct Node
+struct TreeNode
 {
-    int data_;
-    Node* left_;
-    Node* right_;
-    
-    Node(int data):data_(data), left_(NULL), right_(NULL)
-    {}
+    long data_;
+    TreeNode* left_;
+    TreeNode* right_;
+
+    TreeNode(long value):data_(value), left_(NULL), right_(NULL){}
 };
 
-int post_order[N];
-int in_order[N];
-int visited[N];
-
-int getPosInPost(int elem, int n)
+/*
+ * Given the postorder and inorder, Create the binary tree recursively
+ */
+TreeNode* buildTree(vector<long> postOrder, int ps, int pe,
+                    vector<long> inOrder, int is, int ie)
 {
-    for (int i = 0; i < n; ++i)
+    // base case
+    if (ps > pe || is > ie)
     {
-        if (elem == post_order[i])
-        {
-            return i;
-        }
+        return NULL;
     }
-}
 
-// push left and right child of root into queue
-void createdTree(Node* &proot,int root, int n)
-{
-    Node* new_node = new Node(root);
-    proot = new_node;
+    // the root node is the last node of the postorder tree
+    // find it, create it as the root
+    long rootValue = postOrder[pe];
+    TreeNode* root = new TreeNode(rootValue);
 
-    // find root in the in_order array
-    int i = 0;
-    for (i = 0; i < n; ++i)
+    // find the root node in the inorder tree
+    // which divides the tree into left and right two subtrees
+    int mid = 0;
+    for (int i = is; i <= ie; ++i)
     {
-        if (in_order[i] == root)
+        if (inOrder[i] == rootValue)
         {
+            mid = i;
             break;
         }
     }
 
-    // label this position as visited
-    visited[i] = 1;
-    int left_most = i - 1;
-    int right_most = i + 1;
-
-    // find the left tree elements range
-    while (left_most >= 0 && !visited[left_most])
-    {
-        left_most--;
-    }
-    left_most++;
-
-    // find the right tree elements range
-    while (right_most < n && !visited[right_most])
-    {
-        right_most++;
-    }
-    right_most--;
-
-    // both left and right tree has no elems, return
-    if (i - left_most == 0 && right_most - i == 0)
-    {
-        return;
-    }
-
-    // find the left root of the left subtree
-    int left_root = in_order[left_most];
-    int left_max_pos = getPosInPost(left_root, n);
-    for (int k = left_most; k < i; ++k)
-    {
-        int tmp_pos = getPosInPost(in_order[k], n); 
-        if (tmp_pos > left_max_pos)
-        {
-            left_root = in_order[k];
-        }
-    }
-
-    //if (left_root != root)
-    //{
-    //   Node* newnode = new Node(left_root);
-    //   proot->left_ = newnode;
-    //}
-
-    // find the root the right subtree
-    int right_root = in_order[right_most];
-    int max_right_pos = getPosInPost(right_root, n);
-    for (int k = right_most; k > i; --k)
-    {
-        int tmp_pos = getPosInPost(in_order[k], n);
-        if (tmp_pos > max_right_pos)
-        {
-            right_root = in_order[k];
-        }
-    }
-
-    //if (right_root != root)
-    //{
-    //    Node* newnode = new Node(right_root);
-    //    proot->right_ = newnode;
-    //}
-
-    if (left_root != root)
-    {
-        createdTree(proot->left_,left_root, n);
-    }
-    if (right_root != root)
-    {
-        createdTree(proot->right_, right_root, n);
-    }
+    // compute the node number of the left subtree
+    int leftNum = mid - is;
+    
+    // create the left subtree recursively
+    root->left_ = buildTree(postOrder, ps, ps + leftNum - 1,
+                           inOrder, is, mid - 1);
+    // create the right subtree recursively 
+    root->right_ = buildTree(postOrder, ps + leftNum, pe - 1,
+                            inOrder, mid + 1, ie);
+    return root;
 }
 
 int main()
 {
     int n;
     cin >> n;
+    vector<long> postOrder(n);
+    vector<long> inOrder(n);
     for (int i = 0; i < n; ++i)
     {
-        cin >> post_order[i];
+        cin >> postOrder[i];
     }
-
     for (int i = 0; i < n; ++i)
     {
-        cin >> in_order[i];
+        cin >> inOrder[i];
     }
 
-    for (int i = 0; i < n; ++i)
-    {
-        visited[i] = 0;
-    }
-    
-    if (n <= 0)
-    {
-        cout << endl;
-        return 0;
-    }
+    TreeNode* root = buildTree(postOrder, 0, n - 1,
+                               inOrder, 0, n  - 1);
 
-    if (n == 1)
-    {
-        cout << post_order[0] << endl;
-        return 0;
-    }
-   
-    Node* root;
-    createdTree(root, post_order[n-1], n);
-
-    bool flag = false;
-    queue<Node*> q;
-    if (root != NULL)
-    {
-        q.push(root);
-    }
+    bool isFirst = true;
+    queue<TreeNode*> q;
+    q.push(root);
     while (!q.empty())
     {
-        if (flag)
+        if (!isFirst)
         {
             cout << " ";
         }
         else
         {
-            flag = true;
+            isFirst = false;
         }
         cout << q.front()->data_;
         if (q.front()->left_ != NULL)
@@ -177,9 +95,20 @@ int main()
         {
             q.push(q.front()->right_);
         }
-        delete q.front();
         q.pop();
     }
     cout << endl;
+    
     return 0;
 }
+
+
+// Summary
+// 1. This is the first time I implement the problem (given the inorder and
+//    another traversal including level travel). My init idea is to construct
+//    the tree manually via iteration, forget the recursion property instrinsic
+//    in tree
+// 2. This solution mainly refer to others' building tree function. It is 
+//    elegant and simple. thanks for Geeksforgeek.org
+// 3. Trick: tree problem always relys on recursion, because tree is defined
+//    by recursion.
