@@ -4,7 +4,7 @@
 #include <algorithm>
 using namespace std;
 
-long long magic(vector<int> a, vector<int> b)
+long long magic(vector<int> &a, vector<int> &b)
 {
     long long sum = 0;
     for (int i = 0; i < a.size(); ++i)
@@ -31,14 +31,20 @@ long long getNumber(int N, int K)
             b[i] = i + 1;
         }
 
-        do{
-            if (magic(a, b) >= K)
-            {
-                cnt++;
-            }
-        }while(next_permutation(b.begin(), b.end()));
+        if (magic(a, b) >= K)
+        {
+            cnt++;
+        }
 
     }while(next_permutation(a.begin(), a.end()));
+
+    // every permutation of A with a sorted B actually represent
+    // N! kinds of pairs, so the result needs to multiply N! in
+    // the end
+    for (int i = 1; i <= N; ++i)
+    {
+        cnt *= i;
+    }
 
     return cnt;
 }
