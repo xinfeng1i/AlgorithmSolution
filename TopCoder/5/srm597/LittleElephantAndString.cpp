@@ -25,21 +25,23 @@ int getNumber(string A, string B)
 
     int minCnt = MAX_CNT; 
     int curCnt = 0;
+
     for (int i = 0; i < A.size(); ++i)
     {
-        /*
-        if (i == 0 && A[i] == B[0])
-        {
-            curCnt = getNumber(A.substr(1), B.substr(1));
-            if (curCnt < minCnt)
-            {
-                minCnt = curCnt;
-            }
-        }
-        */
         if (A[i] == B[0])
         {
-            curCnt = 1 + getNumber(A.substr(0, i) + A.substr(i + 1), B.substr(1));
+            int diff = 1
+            if (i == 0)
+            {
+                diff = 0;
+            }
+            else
+            {
+                diff = 1
+            }
+
+            curCnt = diff + getNumber(A.substr(0, i) + A.substr(i + 1), B.substr(1));
+
             if (curCnt < minCnt)
             {
                 minCnt = curCnt;
