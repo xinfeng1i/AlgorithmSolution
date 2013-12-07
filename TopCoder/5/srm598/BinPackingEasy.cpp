@@ -8,51 +8,43 @@ using namespace std;
 int minBins(vector<int> item)
 {
     sort(item.begin(), item.end());
-
     int n = item.size();
     vector<bool> visited(n, false);
 
-    int binCnt = 1;
-    int binSpace = 300;
-
-    while (true)
+    int curSpace = 300;
+    int binCnt = 0;
+    int j = n - 1;
+    for (int i = 0; i < n; ++i)
     {
-        while (true)
+        if (visited[i] == false)
         {
-            bool found = false;
-            int i = n - 1;
-            for (i = n - 1; i >= 0; --i)
+            visited[i] = true;
+            curSpace -= item[i];
+            while ( (j > i) &&(visited[j] == true ||item[j] > curSpace) )
             {
-                if (item[i] <= binSpace && !visited[i])
-                {
-                    found = true;
-                    break;
-                }
+                --j;
             }
 
-            if (!found)
+            if (j <= i)
             {
+                binCnt++;
                 break;
             }
             else
             {
-            
-                visited[i] = true;
-                binSpace -= item[i];
+                visited[j] = true;
             }
+            binCnt++;
+            curSpace = 300;
         }
+    }
 
-        // if all items have been placed, break the whole loop
-        if (find(visited.begin(), visited.end(), false) == visited.end())
-        {
-            break;
-        }
-        else    // if not, then add a bin, reset the binSpace
+    for (int i = 0; i < n; ++i)
+    {
+        if (!visited[i])
         {
             binCnt++;
-            binSpace = 300;
         }
-
     }
 
     return binCnt;
@@ -60,7 +52,6 @@ int minBins(vector<int> item)
 
 int main()
 {
-
     int n;
     cin >> n;
     vector<int> v(n, 0);
@@ -69,6 +60,7 @@ int main()
         cin >> v[i];
     }
 
-    cout << "minBins: " << minBins(v) << endl;
+    cout << minBins(v) << endl;
+
     return 0;
 }
