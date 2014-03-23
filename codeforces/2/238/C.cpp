@@ -25,18 +25,19 @@ void printVector(const Matrix& m)
     }
     printf("\n***ED***\n");
 }
+// What a shame, the ith row or col correponding to i - 1 , j - 1
 void flipRow(int i, Matrix& m)
 {
     for (int j = 0; j < m.size(); j++)
     {
-        m[i][j] = 1 - m[i][j];
+        m[i-1][j] = 1 - m[i-1][j];
     }
 }
 void flipCol(int j, Matrix& m)
 {
     for (int i = 0; i < m.size(); ++i)
     {
-        m[i][j] = 1 - m[i][j];
+        m[i][j-1] = 1 - m[i][j-1];
     }
 }
 
@@ -84,24 +85,23 @@ int main()
         {
             int tmp = unusualSquare(a);
             ans.push_back(tmp + '0');
-            cout << "tmp" << tmp << endl;
-            printVector(a);
+            // cout << "tmp" << tmp << endl;
+            // printVector(a);
         }
         else if (type == 1)
         {
             scanf("%d", &row);
             flipRow(row, a);
-            printVector(a);
+            // printVector(a);
         }
         else
         {
             scanf("%d", &col);
             flipCol(col, a);
-            printVector(a);
+            // printVector(a);
         }
     }
     
     cout << ans << endl;
     return 0;
-
 }
