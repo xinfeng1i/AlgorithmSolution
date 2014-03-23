@@ -14,6 +14,8 @@ bool greaterOne(int x)
     return x >= 1;
 }
 
+// VERSION 1: Simulation method
+#if 0
 int main()
 {
     int n = 0;
@@ -61,6 +63,29 @@ int main()
     }
     cout << endl;
 
+
+    return 0;
+}
+#endif //0
+
+// version 2: the editorial version, sort problem
+int main()
+{
+    int n = 0;
+    cin >> n;
+    vector<int> v(n, 0);
+    for (int i = 0; i < n; ++i)
+    {
+        cin >> v[i];
+    }
+
+    sort(v.begin(), v.end());
+
+    for (int i = 0; i < n; ++i)
+    {
+        cout << " " << v[i];
+    }
+    cout << endl;
 
     return 0;
 }
