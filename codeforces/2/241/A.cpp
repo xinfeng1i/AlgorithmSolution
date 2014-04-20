@@ -1,3 +1,5 @@
+// wrong answer on test 54
+// bound condition is not well considered
 #include <iostream>
 #include <string>
 #include <cstdio>
