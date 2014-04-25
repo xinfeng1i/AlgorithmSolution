@@ -57,6 +57,7 @@ int unusualSquare(const Matrix& m)
 
 
 
+#if 0
 int main()
 {
     //freopen("data.txt", "r", stdin);
@@ -107,3 +108,4 @@ int main()
     return 0;
 }
 
+#endif//0

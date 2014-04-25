@@ -68,6 +68,7 @@ int main()
 }
 #endif //0
 
+#if 0
 // version 2: the editorial version, sort problem
 int main()
 {
@@ -89,3 +90,4 @@ int main()
 
     return 0;
 }
+#endif //0
