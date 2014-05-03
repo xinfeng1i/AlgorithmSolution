@@ -20,7 +20,6 @@ int main()
     freopen("input.txt", "r", stdin);
     long n;
     int k;
-    //cin >> n >> k;
     scanf("%ld %d", &n, &k);
 
     map<const char*, long, cmp_str> table;

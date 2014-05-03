@@ -6,6 +6,7 @@
 #include <functional>
 #include <cstdio>
 #include <cstdlib>
+#include <cctype>
 using namespace std;
 
 struct cmpItem
@@ -34,9 +35,18 @@ int main()
 		int pos2 = pos1 + 1;
 		while (line[pos2] != '#') pos2++;
 		string topic = line.substr(pos1+1, pos2 - pos1 - 1);
-		cout << "topic:" << topic << endl;
-		if (topic.size() > 40) topic = topic.substr(0, 40);
-		table[topic]++;
+		string finalTopic;
+		finalTopic.reserve(topic.size());
+		for (size_t i = 0; i < topic.size(); ++i)
+		{
+			if (isalpha(topic[i]) || isdigit(topic[i]) || isspace(topic[i]))
+			{
+				finalTopic.push_back(tolower(topic[i]));
+			}
+		}
+		//cout << "final topic:" << finalTopic << endl;
+		if (finalTopic.size() > 40) finalTopic = finalTopic.substr(0, 40);
+		table[finalTopic]++;
 	}
 
 	vector<pair<string, int> > v;
@@ -46,7 +56,9 @@ int main()
 	}
 
 	sort(v.begin(), v.end(), cmpItem());
-	cout << v[0].first << endl;
+	string t = v[0].first;
+	if (islower(t[0])) t[0] = toupper(t[0]);
+	cout << t << endl;
 	cout << v[0].second << endl;
 
 	int cnt = 0;
