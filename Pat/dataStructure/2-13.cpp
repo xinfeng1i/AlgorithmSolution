@@ -5,6 +5,7 @@
 #include <map>
 #include <algorithm>
 #include <functional>
+#include <iterator>
 #include <numeric>
 #include <limits>
 #include <cmath>
@@ -32,10 +33,12 @@ int main()
     sort(v1.begin(), v1.end());
     sort(v2.begin(), v2.end());
 
-    vector<int> ans(2 * n);
-    auto it = set_union(v1.begin(), v1.end(), v2.begin(), v2.end(), ans.begin());
-    ans.resize(it - ans.begin());
-    int k = ans.size();
-    printf("%d\n", ans[(k-1) / 2]);
+    vector<int> ans;
+	merge(v1.begin(), v1.end(),
+		  v2.begin(), v2.end(),
+		  back_inserter(ans) );
+
+	int k = ans.size();
+	printf("%d\n", ans[(k-1)/2]);
     return 0;
 }
