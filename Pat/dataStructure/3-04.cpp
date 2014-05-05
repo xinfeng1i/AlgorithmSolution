@@ -15,30 +15,27 @@ int main()
 	map<int, int> m2;
 	int n1, n2;
 	int coeff, exps;
+	map<int, int> ans_plus, ans_multi;
 
 	scanf("%d", &n1);
 	for (int i = 0; i < n1; ++i)
 	{
 		scanf("%d %d", &coeff, &exps);
 		m1[exps] = coeff;
+		ans_plus[exps] += coeff;
 	}
 	scanf("%d", &n2);
 	for (int i = 0; i < n2; ++i)
 	{
 		scanf("%d %d", &coeff, &exps);
 		m2[exps] = coeff;
+		ans_plus[exps] += coeff;
 	}
 
-	map<int, int> ans_plus, ans_multi;
 	for (auto it1 = m1.begin(); it1 != m1.end(); ++it1)
 	{
 		for (auto it2 = m2.begin(); it2 != m2.end(); ++it2)
 		{
-			if (it1->first == it2->first)
-			{
-				ans_plus[it1->first] = it1->second + it2->second;
-			}
-
 			ans_multi[it1->first + it2->first] += it1->second * it2->second;
 		}
 	}
