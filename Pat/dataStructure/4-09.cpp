@@ -70,24 +70,28 @@ int main()
 	freopen("input.txt", "r", stdin);
 	int n;
 	cin >> n;
+    cin.ignore();
 	vector<record> v(n);
 	vector<Node*> p(n);
 	set<int> s;
 	for (int i = 0; i < n; ++i)
 	{
 		cin >> v[i].k1 >> v[i].k2 >> v[i].leftAdd >> v[i].rightAdd;
-		cout << v[i].k1 << v[i].k2 << v[i].leftAdd << v[i].rightAdd << endl;
-		//p[i] = new Node(v[i].k1, v[i].k2);
-		//if (v[i].leftAdd != -1) s.insert(v[i].leftAdd);
-		//if (v[i].rightAdd != -1) s.insert(v[i].rightAdd);
+		//cout << v[i].k1 << " "
+        //     << v[i].k2 << " "
+        //     << v[i].leftAdd << " "
+        //     << v[i].rightAdd << endl;
+		p[i] = new Node(v[i].k1, v[i].k2);
+		if (v[i].leftAdd != -1) s.insert(v[i].leftAdd);
+		if (v[i].rightAdd != -1) s.insert(v[i].rightAdd);
 	}
 
-	cout << "record:" << endl;
-	for (int i = 0; i < n; ++i)
-	{
-		cout << v[i].k1 << " " << v[i].k2 << " "
-			 << v[i].leftAdd << " " << v[i].rightAdd << endl;
-	}
+	//cout << "record:" << endl;
+	//for (int i = 0; i < n; ++i)
+	//{
+	//	cout << v[i].k1 << " " << v[i].k2 << " "
+	//		 << v[i].leftAdd << " " << v[i].rightAdd << endl;
+	//}
 
 	// find root index
 	int rootAdd = -1;
@@ -99,7 +103,7 @@ int main()
 			break;
 		}
 	}
-	cout << "root index:" << rootAdd << endl;
+	//cout << "root index:" << rootAdd << endl;
 
 	// create binary tree
 	for (int i = 0; i < n; ++i)
@@ -122,26 +126,28 @@ int main()
 		cout << "NO" << endl;
 	}
 
-	printf("%p\n", p[2]);
-	printf("%p\n", p[2]->left);
-	printf("%p\n", p[0]);
-	printf("%p\n", p[0]->left);
-	printf("%p\n", p[0]->right);
-	printf("%p\n", p[5]);
-	printf("%p\n", p[5]->left);
-	printf("%p\n", p[5]->right);
-	printf("%p\n", p[1]->left);
-	printf("%p\n", p[1]->right);
+	//printf("%p\n", p[2]);
+	//printf("%p\n", p[2]->left);
+	//printf("%p\n", p[0]);
+	//printf("%p\n", p[0]->left);
+	//printf("%p\n", p[0]->right);
+	//printf("%p\n", p[5]);
+	//printf("%p\n", p[5]->left);
+	//printf("%p\n", p[5]->right);
+	//printf("%p\n", p[1]->left);
+	//printf("%p\n", p[1]->right);
 
-	cout << "travel in order:" << endl;
-	InOrder(root);
+	//cout << "travel in order:" << endl;
+	//InOrder(root);
 
 
+    
 	for (int i = 0; i < n; ++i)
 	{
 		delete p[i];
 		p[i] = NULL;
 	}
+    
 
 	
 	return 0;
