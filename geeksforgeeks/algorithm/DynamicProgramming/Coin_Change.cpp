@@ -51,6 +51,10 @@ int CoinChange(int S[], int m, int n)
 
 	return C[m][n];
 }
+/*
+ * 复杂度分析：
+ * 时间，空间复杂度都是O(mn)
+ */
 
 int main()
 {
