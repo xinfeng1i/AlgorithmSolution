@@ -45,7 +45,7 @@ int LCS(char* X, char* Y, int m, int n)
 	for (int i = 0; i <= m; ++i) L[i][0] = 0;
 
 	// DP by bottom to up 
-	for (int i = 1; i <= n; ++i)
+	for (int i = 1; i <= m; ++i)
 	{
 		for (int j = 1; j <= n; ++j)
 		{
