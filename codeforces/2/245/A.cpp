@@ -15,53 +15,36 @@ int main()
 {
 	int n, m;
 	scanf("%d %d", &n, &m);
+
+	map<int, int> table;
 	vector<int> v(n);
 	for (int i = 0;i < n; ++i)
 	{
 		scanf("%d", &v[i]);
+		table[v[i]] = 0;
 	}
 
-	sort(v.begin(), v.end());
-	vector<int> flag(n, -1);
+	map<int, int>::iterator it;
+	int cnt = 0;
+	for (it = table.begin(); it != table.end(); ++it)
+	{
+		table[it->first] = cnt++;
+	}
 
 	int left, right;
 	for (int i = 0; i < m; ++i)
 	{
 		scanf("%d %d", &left, &right);
-		int cnt = 0;
-		int n0 = 0; int n1 = 0;
-		for (int i = 0; i < n; ++i)
-		{
-			if (v[i] >= left && v[i] <= right)
-			{
-				if (cnt % 2 == 0 && flag[i] == -1)
-				{
-					flag[i] = 0;	
-					cnt++;
-					n0++;
-				}
-				else if (cnt % 2 == 1 && flag[i] == -1)
-				{
-					flag[i] = 1;
-					cnt++;
-					n1++;
-				}
-			}
-		}
-
-		if (abs(n0 - n1) > 1)
-		{
-			cout << -1 << endl;
-			return 0;
-		}
 	}
 
 	bool isFirst = true;
 	for (int i = 0; i < n; ++i)
 	{
-		if (isFirst) {printf("%d", flag[i]); isFirst = false;}
-		else { printf(" %d", flag[i]);}
+		int x = v[i];
+		if (isFirst) {cout << table[x] % 2; isFirst = false;}
+		else cout << " " << table[x] % 2;
 	}
-	cout << endl;	
+	cout << endl;
+
 	return 0;
 }
