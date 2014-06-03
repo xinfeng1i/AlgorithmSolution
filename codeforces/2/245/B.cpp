@@ -11,74 +11,58 @@
 #include <cstdlib>
 using namespace std;
 
-vector<int> xiaochu(vector<int>& v, bool &flag)
+int xiaochu(vector<int> &v)
 {
+	//for (int i = 0; i < v.size(); ++i) cout << " " << v[i];
+	//cout << endl;
+
 	int n = v.size();
-	for (int i = 0; i <= n - 3; ++i)
+	bool flag = false;
+	int i;
+	for (i = 0; i + 2 < n; ++i)
 	{
 		if (v[i] == v[i+1] && v[i+1] == v[i+2])
+		{
 			flag = true;
+			break;
+		}
 	}
 
-	int maxcnt = 0;
-	int maxindex = -1;
-	for (int i = 0; i < n; )
+	if (!flag) 
+	{
+		return 0;
+	}
+	else
 	{
 		int j = i;
-		int cnt = 1;
-		while (j < n && v[j+1] == v[j])
-		{
-			cnt++;
-			j++;
-		}
-		if (cnt > maxcnt)
-		{
-			maxcnt = cnt;
-			maxindex = i;
-		}
-
-		i = j;
+		while (j < n && v[j] == v[i]) j++;
+		vector<int> vv; vv.reserve(n);
+		for (int ii = 0; ii < i; ++ii) vv.push_back(v[ii]);
+		for (int jj = j; jj < n; ++jj) vv.push_back(v[jj]);
+		return max(j - i + xiaochu(vv), 0);
 	}
 
-	vector<int> ans;
-	for (int i = 0; i < maxindex; ++i)
-	{
-		ans.push_back(v[i]);
-	}
-	for (int i = maxindex; i < n; ++i)
-	{
-		ans.push_back(v[i]);
-	}
-
-	return ans;
 }
 
 int main()
 {
 	int n, k, x;
-	scanf("%d %d %d", &n, &k, &x);
+	//scanf("%d %d %d\n", &n, &k, &x);
+	cin >> n >> k >> x;
 	vector<int> v(n, 0);
-	for (int i = 0; i < n; ++i) scanf("%d", &v[i]);
+	for (int i = 0; i < n; ++i) 
+		//scanf("%d", &v[i]);
+		cin >> v[i];
 
 	int ans = -1;
-	for (int i = 0; i < n; ++i)
+	for (int i = 0; i <= n; ++i)
 	{
 		vector<int> vv(v.begin(), v.end());
-		vv.insert(v.begin() + i, x);
-		bool possible = false;
-		vector<int> xiao = xiaochu(vv, possible);
-		if (!possible)
-		{
-			continue;
-		}
-		while (possible)
-		{
-			vv = xiao;
-			xiao = xiaochu(vv, possible);
-		}
-		ans = max(ans, n - int(vv.size()));
-
+		vv.insert(vv.begin() + i, x);
+		int curCnt = xiaochu(vv);
+		ans = max(ans, curCnt);
 	}
+	ans = max(ans-1, 0);
 
 	cout << ans << endl;
 
