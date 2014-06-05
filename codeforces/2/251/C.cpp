@@ -28,15 +28,22 @@ int main()
 	}
 
 
-	if ( ((k-p) % 2 == 0 && sum % 2 == 1) ||
-		 ((k-p) % 2 == 1 && sum % 2 == 0) )
+	// 奇偶性检验
+	if ( (k-p) % 2 != sum % 2 )
 	{
 		cout << "NO" << endl;
 		return 0;
 	}
 	else
 	{
+		// 判断奇数组是否满足要求
 		if ( (k-p) > odds.size() )
+		{
+			cout << "NO" << endl;
+			return 0;
+		}
+		// 判断偶数组是否满足要求
+		else if ( ((odds.size() - (k-p)) / 2 + evens.size()) < k)
 		{
 			cout << "NO" << endl;
 			return 0;
@@ -45,12 +52,14 @@ int main()
 		{
 			cout << "YES" << endl;
 
+			// 输出k-p个奇数组
 			for (int i = 0; i < k-p; ++i)
 			{
 				cout << 1 <<" "<< odds.front() << endl;
 				odds.pop();
 			}
 
+			// 奇数组已经可以满足要求，直接输出
 			if (odds.size() / 2 >= p)
 			{
 				for (int i = 0; i < p - 1; ++i)
@@ -80,6 +89,18 @@ int main()
 			}
 			else
 			{
+				// 每两个数作为一组，输出
+				for (int i = 0; i < odds.size() / 2; ++i)
+				{
+					cout << 2;
+					cout << " " << odds.front();
+					odds.pop();
+					cout << " " << odds.front() << endl;
+					odds.pop();
+					p--;
+				}
+
+				/* 不能保证是偶数，因而可能出现pop一次后就empty的情况
 				while (!odds.empty())
 				{
 					cout << 2;
@@ -89,6 +110,7 @@ int main()
 					odds.pop();
 					p--;
 				}
+				*/
 				
 				for (int i = 0; i < p-1; ++i)
 				{
@@ -97,22 +119,29 @@ int main()
 				}
 
 				// last line
-				cout << evens.size();
+				cout << evens.size() + odds.size();
 				while (!evens.empty())
 				{
 					cout << " " << evens.front();
 					evens.pop();
+				}
+				while (!odds.empty())
+				{
+					cout << " " << odds.front();
+					odds.pop();
 				}
 				cout << endl;
 				
 				return 0;
 
 			}
-
-
 		}
-
 	}
 	
 	return 0;
 }
+
+/*
+ * 总结：多用assert减少调试难度
+ *       如果证明不确定，增加断言保证准确性
+ */
