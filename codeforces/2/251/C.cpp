@@ -43,7 +43,7 @@ int main()
 			return 0;
 		}
 		// 判断偶数组是否满足要求
-		else if ( ((odds.size() - (k-p)) / 2 + evens.size()) < k)
+		else if ( (odds.size() - (k-p)) / 2 + evens.size() < p)
 		{
 			cout << "NO" << endl;
 			return 0;
@@ -71,6 +71,10 @@ int main()
 					odds.pop();
 				}
 
+				if (odds.size() + evens.size() == 0)
+				{
+					return 0;
+				}
 				// last line
 				cout << odds.size() + evens.size();
 				while (!odds.empty())
@@ -90,7 +94,8 @@ int main()
 			else
 			{
 				// 每两个数作为一组，输出
-				for (int i = 0; i < odds.size() / 2; ++i)
+				int cur_odds_size = odds.size();
+				for (int i = 0; i < cur_odds_size / 2; ++i)
 				{
 					cout << 2;
 					cout << " " << odds.front();
@@ -99,18 +104,6 @@ int main()
 					odds.pop();
 					p--;
 				}
-
-				/* 不能保证是偶数，因而可能出现pop一次后就empty的情况
-				while (!odds.empty())
-				{
-					cout << 2;
-					cout << " " << odds.front();
-					odds.pop();
-					cout << " " << odds.front() << endl;
-					odds.pop();
-					p--;
-				}
-				*/
 				
 				for (int i = 0; i < p-1; ++i)
 				{
@@ -118,6 +111,10 @@ int main()
 					evens.pop();
 				}
 
+				if (evens.size() + odds.size() == 0)
+				{
+					return 0;
+				}
 				// last line
 				cout << evens.size() + odds.size();
 				while (!evens.empty())
