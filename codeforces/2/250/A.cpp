@@ -6,7 +6,7 @@ using namespace std;
 
 int main()
 {
-	freopen("input.txt", "r", stdin);
+	//freopen("input.txt", "r", stdin);
 	string a, b, c, d;
 	cin >> a >> b >> c >> d;
 	int alen = (int)a.size() - 2;
