@@ -13,7 +13,6 @@ int main()
 	cin >> n >> v;
 
 	map<int, int> table;
-	//table.reserve(n);
 	int a, b;
 	for (int i = 0; i < n; ++i)
 	{
@@ -21,34 +20,37 @@ int main()
 		table[a] += b;
 	}
 
-	vector<int> fruit;
-	fruit.reserve(n);
-	for (auto it = table.begin(); it != table.end(); ++it)
+	long long ans = 0;
+	for (int day = 1; day <= 3000 + 5; ++day)
 	{
-		fruit.push_back(it->second);
-	}
-
-	long long ans = min(fruit[0], v);
-	fruit[0] -= min(fruit[0], v);
-
-	
-	for (int i = 1; i <= fruit.size() ; ++i)
-	{
-		int cur = v;			
-		int getPrev = min(fruit[i-1], cur);
-		ans += getPrev;
-		fruit[i-1] -= getPrev;
-		cur -= getPrev;
-
-		if (i < fruit.size())
+		int todayCapacity = v;
+		if (table.count(day-1) != 0)
 		{
-			int getCur = min(fruit[i], cur);
+			int getPrev = min(table[day-1], todayCapacity);
+			table[day-1] -= getPrev;
+			todayCapacity -= getPrev;
+			ans += getPrev;
+		}
+		
+		if (table.count(day) != 0)
+		{
+			int getCur = min(table[day], todayCapacity);
+			table[day] -= getCur;
+			todayCapacity -= getCur;
 			ans += getCur;
-			fruit[i] -= getCur;
-			cur -= getCur;
 		}
 	}
 
 	cout << ans << endl;
 	return 0;
 }
+/* the fruit can be picked on days that is dicreted
+ * for example
+ * 1, 10, 20th day
+ * the on 11th day only 10 can be picked
+ * but on 12th day not any apples can be picked
+ */
+/*
+ * Implementation:
+ * When you need a map structure, consider the big array in replace
+ */
