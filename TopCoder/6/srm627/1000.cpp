@@ -46,7 +46,8 @@ public:
 	//         A[j] with j < x do not affect the the number of Nixu at index x
 	//         So in this case
 	//         f(x, k) = The number of nixu at index x + f(x + 1, k)
-	// Case 2: A[x] is in the reversed subarray, we only need to consider the reversed	  //	     subarray (A[x], A[x+1], ..., A[y-1], A[y]), cause if the reversing 
+	// Case 2: A[x] is in the reversed subarray, we only need to consider the reversed	  
+    // 	       subarray (A[x], A[x+1], ..., A[y-1], A[y]), cause if the reversing 
 	//         start before index x such as (A[a], A[b], A[c], A[x], ...), then when
 	//         x = a, it equals exactly the situation of current time
 	//         So in this Case:
