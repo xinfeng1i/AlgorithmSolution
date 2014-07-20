@@ -130,6 +130,88 @@ Node* insertNode(Node* root, int data)
 	return root;
 }
 
+Node* deleteNode(Node* root, int data)
+{
+	// STEP 1: delete the node normally
+	if (root == NULL) return root;
+	
+	if (data < root->key_)
+	{
+		root->left_ = deleteNode(root->left_, data);	
+	}
+	else if (data > root->key_)
+	{
+		root->right_ = deleteNode(root->right_, data);
+	}
+	else
+	{
+		// has no children
+		if (root->left_ == NULL && root->right_ == NULL)
+		{
+			delete root;
+			root = NULL;
+		}
+		// has one child
+		else if (  (root->left_ == NULL && root->right_ != NULL)
+				 ||(root->left_ != NULL && root->right_ == NULL) )
+		{
+			Node* tmp = (root->left_ == NULL ? root->right_ : root->left_);
+			
+			root->left_ = tmp->left_;
+			root->right_ = tmp->right_;
+			root->key_ = tmp->key_;
+
+			delete tmp;
+		}
+		// has both children
+		else
+		{
+			Node* minValue = minValueNode(root->right_);	
+			root->key_ = minValue->key_;
+			root->right_ = deleteNode(root->right_, minValue->key_);
+		}
+	}
+
+	// if has only one node, return NULL
+	if (root == NULL) return NULL;
+
+	// STEP 2: update the height
+	root->height_ = max(getHeight(root->left_), getHeight(root->right_)) + 1;
+
+	// STEP 3: rotation
+	int ba = balanceFactor(root);
+	if (ba >= 2)
+	{
+		// Left left case
+		if (balanceFactor(root->left_) >= 0)
+		{
+			return rightRotation(root);	
+		}
+		// left right case
+		else if (balanceFactor(root->left_) <= -1)
+		{
+			root->left_ = leftRotation(root->left_);	
+			return rightRotation(root);
+		}
+
+	}
+	else if (ba <= -2)
+	{
+		// right right case
+		if (balanceFactor(root->right_) <= 0)
+		{
+			return leftRotation(root);	
+		}
+		// right left case
+		else if (balanceFactor(root->right_) >= 1)
+		{
+			root->right_ = rightRotation(root->right_);
+			return leftRotation(root);
+		}
+	}
+	return root;
+}
+
 void preVisit(Node* root)
 {
 	if (root == NULL) return;
@@ -150,15 +232,33 @@ void inVisit(Node* root)
 int main()
 {
 	Node* root = NULL;
+	root = insertNode(root, 9);
+	root = insertNode(root, 5);
 	root = insertNode(root, 10);
-	root = insertNode(root, 20);
-	root = insertNode(root, 30);
-	root = insertNode(root, 40);
-	root = insertNode(root, 50);
-	root = insertNode(root, 25);
+	root = insertNode(root, 0);
+	root = insertNode(root, 6);
+	root = insertNode(root, 11);
+	root = insertNode(root, -1);
+	root = insertNode(root, 1);
+	root = insertNode(root, 2);
 
+	//cout << "root:" << root->key_ << endl;
+	//cout << "roor->left_ :" << root->left_->key_ << endl;
 	preVisit(root);
 	printf("\n");
 	inVisit(root);
 	printf("\n");
+
+
+	root = deleteNode(root, 10);
+	printf("After delete Node 10\n");
+
+	//cout << "root:" << root->key_ << endl;
+	//cout << "roor->left_ :" << root->left_->key_ << endl;
+	preVisit(root);
+	printf("\n");
+	inVisit(root);
+	printf("\n");
+
+	return 0;
 }
