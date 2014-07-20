@@ -7,140 +7,119 @@
 #include <cstdio>
 using namespace std;
 
-struct Edge
-{
-    int start;
-    int end;
-    int weight;
-    int cost;
-    bool operator<(const Edge& other) const
-    {
-        if (start < other.start)
-        {
-            return true;
-        }
-        else if (start == other.start)
-        {
-            if (weight < other.weight)
-            {
-                return true;
-            }
-            else if (weight > other.weight)
-            {
-                return false;
-            }
-            else
-            {
-                return cost < other.cost;
-            }
-        }
-        else
-        {
-            return false;
-        }
-    }
-};
+const int INF = 1E8;
+vector<int> globalPath;
+int globalCost = INF;
 
-bool isAllVisited(vector<bool> flag)
+int findMinDist(vector<int> dist, vector<int> visited)
 {
-    for (int i = 0; i < flag.size(); ++i)
-    {
-        if (!flag[i])
-        {
-            return false;
-        }
-    }
+	int min = INF; int minIndex = -1;
+	for (size_t i = 0; i < dist.size(); ++i)
+	{
+		if (!visited[i] && dist[i] < min)
+		{
+			min = dist[i];
+			minIndex = i;
+		}
+	}
 
-    return true;
+	return minIndex;
+}
+
+void dfs_visit(int dest, int src, int curcost, vector<int> path,
+		const vector<vector<int> >& parent,
+		const vector<vector<int> >& cost)
+{
+	if (dest == src) 
+	{
+		path.push_back(dest);
+		if (curcost < globalCost)
+		{
+			globalCost = curcost;
+			globalPath.clear();
+			for (size_t i = 0; i < path.size(); ++i)
+			{
+				globalPath.push_back(path[i]);
+			}
+		}
+		return;
+	}
+	
+	path.push_back(dest);
+	for (size_t i = 0; i < parent[dest].size(); ++i)
+	{
+		int v = parent[dest][i];
+		dfs_visit(v, src, cost[dest][v] + curcost, path, parent, cost);
+	}
 }
 
 int main()
 {
-    //freopen("1030data.txt", "r", stdin);
-    int N = 0;
-    long M = 0;
-    int S = 0; 
-    int D = 0;
-    cin >> N >> M >> S >> D;
+	freopen("input.txt", "r", stdin);
+	int n, m, s, d;
+	cin >> n >> m >> s >> d;
+	vector<vector<int> > graph(n, vector<int>(n, INF));
+	vector<vector<int> > cost(n, vector<int>(n, INF));
 
-    vector<int> dist(N, 10000);
-    vector<long> distcost(N, 300000);
-    vector<bool> isVisited(N, false);
-    vector<int> prev(N, -1);
-    vector<Edge> edges(M);
-    for (long i = 0; i < M; ++i)
-    {
-        cin >> edges[i].start >> edges[i].end
-            >> edges[i].weight >> edges[i].cost;
-    }
+	int eds, ede, edw, edc;
+	for (int i = 0; i < m; ++i)
+	{
+		cin >> eds >> ede >> edw >> edc;	
 
-    sort(edges.begin(), edges.end());
+		graph[eds][ede] = edw;
+		graph[ede][eds] = edw;
+		cost[eds][ede] = edc;
+		cost[ede][eds] = edc;
+	}
 
-    // Dijkstra Algorithm to calculate shortest path
-    // Shortest path from S to all the other nodes
-    dist[S] = 0;
-    distcost[S] = 0;
 
-    // not all nodes have been added into R, loop
-    while (!isAllVisited(isVisited))
-    {
-        // choose node u such that dist[u] smallest
-        int u = -1;
-        int min_u = 10000;
-        long cost_u = 300000;
-        for (int i = 0; i < N; ++i)
-        {
-            if (!isVisited[i] && dist[i] < min_u)
-            {
-                u = i;
-                min_u = dist[i];
-                cost_u = distcost[i];
-            }
-            else if (!isVisited[i] && dist[i] == min_u && distcost[i] < cost_u)
-            {
-                u = i;
-                min_u = dist[i];
-                cost_u = distcost[i];
-            }
-        }
+	
+	// Dijkstra Algorithm
+	vector<vector<int> > parent(n);
+	vector<int> dist(n, INF);	
+	vector<int> visited(n, 0);
+	dist[s] = 0;
 
-        // add u
-        isVisited[u] = true;
+	for (int i = 0; i < n; ++i)
+	{
+		// find the mindist node as current node
+		int u = findMinDist(dist, visited);
+		// visit the current node
+		visited[u] = 1;
 
-        // update all the dist[v] which (u,v) in E
-        for (long i = 0; i < M; ++i)
-        {
-            if (edges[i].start == u)
-            {
-                int v = edges[i].end;
-                int weight = edges[i].weight;
-                int costt = edges[i].cost;
-                if (dist[v] > dist[u] + weight)
-                {
-                    dist[v] = dist[u] + weight;
-                    prev[v] = u;
-                    distcost[v] = distcost[u] + costt;
-                }
-                else if (dist[v] == dist[u] + weight && 
-                         distcost[v] < distcost[u] + costt)
-                {
-                    dist[v] = dist[u] + weight;
-                    prev[v] = u;
-                    distcost[v] = distcost[u] + costt;
+		// update all its neighbors
+		for (int v = 0; v < n; ++v)
+		{
+			if (graph[u][v] != INF && !visited[v] && dist[u] != INF
+					&& dist[u] + graph[u][v] < dist[v])
+			{
+				dist[v] = dist[u] + graph[u][v];
+				parent[v].clear();
+				parent[v].push_back(u);
+			}
+			else if (graph[u][v] != INF && !visited[v] && dist[u] != INF
+					&& dist[u] + graph[u][v] == dist[v])
+			{
+				parent[v].push_back(u);
+			}
+		}
+	}
 
-                }
-            }
-        }
-    }
+	vector<int> path;
+	dfs_visit(d, s, 0, path, parent, cost);
 
-    cout << "path backwards:" << endl;
-    cout << D << " ";
-    while (prev[D] != -1)
-    {
-        cout << prev[D] << " ";
-        D = prev[D];
-    }
-    cout << endl;
-    
-    return 0;
+	bool isFirst = true;
+	for (auto it = globalPath.rbegin(); 
+			it != globalPath.rend(); ++it)
+	{
+		if (isFirst) isFirst = false;
+		else cout << " ";
+
+		cout << *it; 
+	}
+	cout << " " << dist[d] << " " << globalCost << endl;
+
+
+	return 0;	
+
 }
