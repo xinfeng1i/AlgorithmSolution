@@ -32,6 +32,7 @@ int main()
 	double p = 0.0;
 	double r = 0;
 	cin >> n >> p >> r;
+    //scanf("%d %f %f", &n, &p, &r);
 
 	// init
 	vector<int> prev(n, -1);
@@ -47,19 +48,22 @@ int main()
 	int ac = 0;
 	for (int i = 0; i < n; ++i)
 	{
-		cin >> k;
+		//cin >> k;
+        scanf("%d", &k);
 		if (k != 0)
 		{
 			for (int j = 0; j < k; ++j)
 			{
-				cin >> nr;
+				//cin >> nr;
+                scanf("%d", &nr);
 				prev[nr] = i;
 				a[i]->children_.insert(a[nr]);
 			}
 		}
 		else
 		{
-			cin >> ac;
+			//cin >> ac;
+            scanf("%d", &ac);
 			//cout << "ac:" << ac << endl;
 			a[i]->amount_ = ac;
 
@@ -87,14 +91,6 @@ int main()
 			q.push(v);
 		}
 	}
-
-	// test
-	//for (int i = 0; i < n; ++i)
-	//{
-	//		cout << i << " : " << "level:" << a[i]->level_
-	//			               << "  amount:" << a[i]->amount_ << endl;
-	//}
-	
 
 	double sum = 0.0;
 	for (int i = 0; i < n; ++i)
