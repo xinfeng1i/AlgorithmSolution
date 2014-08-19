@@ -36,7 +36,7 @@ int main()
 
 	// init
 	vector<int> prev(n, -1);
-	vector<Node*> a(n, NULL);
+	vector<Node*> a(n);
 	for (int i = 0; i < n; ++i)
 	{
 		a[i] = new Node(i);
@@ -64,9 +64,13 @@ int main()
 		{
 			//cin >> ac;
             scanf("%d", &ac);
-			//cout << "ac:" << ac << endl;
 			a[i]->amount_ = ac;
 
+            // This part cost much of time, suppose the height
+            // of tree is h = log(n), for the worst situation, the number
+            // of leaves is about n/2, so the total cost is O(nlogn)
+            // cut this, the time is fine
+            /*
 			int cur = i;
 			while (prev[cur] != -1)
 			{
@@ -74,20 +78,24 @@ int main()
 				a[iparent]->amount_ += ac;
 				cur = iparent;
 			}
+            */
 		}
 	}
 
 	// bfs
 	queue<Node*> q;
 	q.push(a[0]);
+    a[0]->price_ = p;
+    set<Node*>::iterator it;
 	while (!q.empty())
 	{
 		Node* u = q.front();
 		q.pop();
-		for (auto it = u->children_.begin(); it != u->children_.end(); ++it)
+		for (it = u->children_.begin(); it != u->children_.end(); ++it)
 		{
 			Node* v = *it;
 			v->level_ = u->level_ + 1;
+            v->price_ = u->price_ * (1 + r/100);
 			q.push(v);
 		}
 	}
@@ -97,10 +105,7 @@ int main()
 	{
 		if (a[i]->children_.empty())
 		{
-			double curAmount = a[i]->amount_;
-			int curLevel = a[i]->level_;	
-			double curPrice = p * pow((1 + r/100.0), curLevel);
-			sum += (curPrice) * curAmount;
+			sum += a[i]->price_ * a[i]->amount_;
 		}
 	}
 
