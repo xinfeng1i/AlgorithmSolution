@@ -7,7 +7,7 @@
 using namespace std;
 
 const int maxK = 10;
-const int maxN = 100000+5;
+const int maxN = 10000+5;
 const int NINF = -10000;
 
 struct Stu
@@ -77,13 +77,9 @@ int main()
         {
             student[curID].mark_[curPID] = curScore;
         }
-        if (curScore == p[curPID])
-        {
-            student[curID].nPerfect_++;
-        }
     }
 
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i <= n; ++i)
     {
         if (!badStu(student[i], k))
         {
@@ -94,6 +90,13 @@ int main()
                 {
                     student[i].total_ += student[i].mark_[j];
                 }
+				// NOTICE: nPerfect can be only counted by count all the mark_[i]s
+				//         while in the scanf process, if one commit one perfect 
+				//         solution for many times, it will fail
+				if (student[i].mark_[j] == p[j])
+				{
+					student[i].nPerfect_++;
+				}
             }
         }
     }
@@ -108,11 +111,6 @@ int main()
         {
             student[i].rank_ = student[i-1].rank_;
         }
-    }
-
-    for (int i = 0; i < n; ++i)
-    {
-        printf("%d %05d %d\n", i, student[i].id_, student[i].total_);
     }
 
     // output
