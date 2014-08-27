@@ -40,25 +40,26 @@ int main()
 {
     freopen("input.txt", "r", stdin);
     cin >> cmax >> D >> Davg >> N;
-    vector<Station> v(N);
+    vector<Station> v(N+1);
     for (int i = 0; i < N; ++i)
     {
         scanf("%lf %lf", &v[i].price_, &v[i].dist_);
     }
+    v[N].price_ = 0.0;
+    v[N].dist_ = D;
     sort(v.begin(), v.end());
 
-    for (int i = 0; i < N; ++i)
-    {
-        cout << "v[" << i << "]:" << v[i].dist_  << "\t" << v[i].price_<< endl;
-    }
 
-    /*
-    if (v[0].dist_ == 0)
+    //for (int i = 0; i < N; ++i)
+    //{
+    //    cout << "v[" << i << "]:" << v[i].dist_  << "\t" << v[i].price_<< endl;
+    //}
+
+    if (v[0].dist_ != 0)
     {
         printf("The maximum travel distance = 0.00\n");
         return 0;
     }
-    */
 
     double ans = 0.0;
 
@@ -66,26 +67,29 @@ int main()
     double curGas = 0;
     int curStation = 0;
     int nextStation = 0;
-    double curCanRun = (curGas + 0.0) / (Davg + 0.0) + curDist;
+    double curCanRun = curGas * Davg;
     double longestRun = cmax * Davg;
 
     while (true)
     {
+        nextStation = curStation + 1;
+        curCanRun = curGas * Davg;
         // 如果当前油量能够到达终点，输出结果后，返回
-        if (curCanRun >= D)
+        if (curCanRun + curDist >= D)
         {
             printf("%.2f\n", ans);
             return 0;
         }
 
-        // 如果当前油量甚至不能到达紧邻的下一站，那么输出最大距离后返回
-        if (curCanRun < v[nextStation].dist_)
+        // 如果当前油量即使加满甚至不能到达紧邻的下一站，那么输出最大距离后返回
+        if (curDist + longestRun < v[nextStation].dist_)
         {
-            printf("The maximum travel distance = %.2f\n", curCanRun);
+            double tmp = curDist + longestRun;
+            printf("The maximum travel distance = %.2f\n", tmp);
             return 0;
         }
         //如果当前油量能够行使到一个更便宜的加油站，then先行驶到再说
-        else if ((nextStation = FindNextStation(curCanRun, curStation, v)) != -1)
+        else if ((nextStation = FindNextStation(curDist+curCanRun, curStation, v)) != -1)
         {
             curDist = v[nextStation].dist_;
             curGas -= (v[nextStation].dist_ - v[curStation].dist_) /(Davg + 0.0);
@@ -126,3 +130,4 @@ int main()
 
     return 0;
 }
+
