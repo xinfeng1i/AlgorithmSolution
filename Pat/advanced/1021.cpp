@@ -129,7 +129,6 @@ int main()
 
     int cmpts = component();
 
-    //cout << cmpts << endl;
     if (cmpts > 1)
     {
         cout << "Error: " << cmpts << " components" << endl;
