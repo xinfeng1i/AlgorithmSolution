@@ -7,6 +7,13 @@
 #include <cstdio>
 #include <cstdlib>
 using namespace std;
+/* 算法思想：
+ * 1. 首先采用并查集来判断连通性，并且给出连通分支的数量
+ * 2. 然后任取一个点x做bfs遍历，找到所有距离x最远的节点集y1, y2, y3...
+ * 3. 再从集合y中任意选择一个节点y1进行第二次bfs遍历，得到距离y1最远的节点集
+ *    合z1,z2,z3...，则所有在y集合和z集合中的点{y1,y2,y3...,z1,z2,z3...}
+ *    即为所求的deepest root
+ */
 
 vector<int> parent;
 vector<int> myrank;
