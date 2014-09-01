@@ -1,5 +1,4 @@
 #include <iostream>
-#include <istream>
 #include <string>
 #include <vector>
 #include <list>
@@ -9,14 +8,14 @@
 #include <cstdlib>
 using namespace std;
 
-long gcdgcd(long a, long b)
+long long gcdgcd(long long a, long long b)
 {
-    int remainder = 0;
+    long long r = 0;
     while (b != 0)
     {
-        remainder = a % b;
+        r = a % b;
         a = b;
-        b = remainder;
+        b = r;
     }
     return a;
 }
@@ -25,10 +24,10 @@ long gcdgcd(long a, long b)
 class FractionalNumber
 {
 public:
-    long numerator_;        // fenzi
-    long denominator_;      // fenmu
+    long long numerator_;        // fenzi
+    long long denominator_;      // fenmu
 public:
-    FractionalNumber(int a = 1, int b = 1):numerator_(a),denominator_(b)
+    FractionalNumber(long long a = 1, long long b = 1):numerator_(a),denominator_(b)
     {}
 
     friend FractionalNumber operator+(const FractionalNumber& a, const FractionalNumber& b);
@@ -37,14 +36,37 @@ public:
 
 FractionalNumber operator+(const FractionalNumber& a, const FractionalNumber& b)
 {
-    long m = gcdgcd(a.denominator_, b.denominator_);
-    m = m * (a.denominator_ / m) * (b.denominator_ / m);
-    long n1 = a.numerator_ * (m / a.denominator_);
-    long n2 = b.numerator_ * (m / b.denominator_);
-    long n = n1 + n2;
-    long g = gcdgcd(abs(m), abs(n));
+    long long m = gcdgcd(a.denominator_, b.denominator_);
+    if (m == 0) // 分母中有0的情况
+    {
+        if (a.denominator_ == 0 && b.denominator_ == 0)
+        {
+            return FractionalNumber(0, 1);
+        }
+        else if (a.denominator_ == 0)
+        {
+            return b;
+        }
+        else if (b.denominator_ == 0)
+        {
+            return a;
+        }
+    }
 
-    return FractionalNumber(n / g, m / g);
+    long long n1 = a.numerator_ * (b.denominator_ / m); // 先化简再计算，防止溢出, 坑点2
+    long long n2 = b.numerator_ * (a.denominator_ / m);
+    long long fenzi = n1 + n2;
+    long long fenmu = a.denominator_ / m * b.denominator_;
+    long long g = gcdgcd((long long)fabs(fenzi), (long long)fabs(fenmu));
+    if (g == 0)
+    {
+        if (fenzi == 0)
+        {
+            return FractionalNumber(0, 1);
+        }
+    }
+
+    return FractionalNumber(fenzi / g, fenmu / g);
 }
 
 istream& operator>>(istream& in, FractionalNumber& a)
@@ -71,7 +93,7 @@ int main()
         ans = ans + v[i];
     }
 
-    if (abs(ans.numerator_) > abs(ans.denominator_))
+    if (fabs(ans.numerator_) > fabs(ans.denominator_))
     {
         if (ans.numerator_ % ans.denominator_ == 0)
         {
@@ -80,19 +102,27 @@ int main()
         }
         else
         {
-            long intPart = ans.numerator_ / ans.denominator_;
-            ans.numerator_ = abs(ans.numerator_) % ans.denominator_;
+            long long intPart = ans.numerator_ / ans.denominator_;
+            ans.numerator_ = (long long)(fabs(ans.numerator_)) % ans.denominator_;
             cout << intPart << " " << ans.numerator_ << "/" << ans.denominator_ << endl;
         }
     }
-    else if (abs(ans.numerator_) == abs(ans.denominator_))
+    else if (fabs(ans.numerator_) == fabs(ans.denominator_))
     {
         cout << ans.numerator_ << endl;
     }
-    else
+    else if (fabs(ans.numerator_) < fabs(ans.denominator_))
     {
-        cout << ans.numerator_ << "/" << ans.denominator_ << endl;
+        if (fabs(ans.numerator_) == 0) // 分子为0，直接输出0，坑点
+        {
+            cout << 0 << endl;
+        }
+        else
+        {
+            cout << ans.numerator_ << "/" << ans.denominator_ << endl;
+        }
     }
     return 0;
 }
+
 
