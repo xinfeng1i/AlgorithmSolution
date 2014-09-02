@@ -10,6 +10,10 @@
 #include <cstring>
 using namespace std;
 
+// special stack: 
+// Push: O(logn)
+// Pop:	 O(logn)
+// PeekMedian: O(1)
 class MyStack
 {
 public:
@@ -17,9 +21,9 @@ public:
     int Pop();
     int PeekMedian();
 private:
-    multiset<int, greater<int> > lower;
-    multiset<int> higher;
-    stack<int> s;
+    multiset<int, greater<int> > lower; // numbers smaller than median, decrease order
+    multiset<int> higher;				// numbers greater than median, increase order
+    stack<int> s;						// normal stack
 };
 
 void MyStack::Push(int key)
@@ -47,34 +51,23 @@ void MyStack::Push(int key)
     }
     else if (lower.size() + 1 == higher.size())
     {
-        if (lower.size() == 0)
-        {
-            lower.insert(key);
-            int x = *lower.begin();
-            int y = *higher.begin();
-            if (x > y)
-            {
-                lower.erase(x);
-                lower.insert(y);
-                higher.erase(y);
-                higher.insert(x);
-            }
-        }
-        else
-        {
-            int y = *higher.begin(); 
-            if (key <= y)
-            {
-                lower.insert(key);
-            }
-            else
-            {
-                higher.insert(key);
-                int yy = *higher.begin();
-                higher.erase(yy);
-                lower.insert(yy);
-            }
-        }
+
+		int y = *higher.begin(); 
+		if (key <= y)
+		{
+			lower.insert(key);
+		}
+		else
+		{
+			// adjust lower and higher, keep lower.size() = higher.size() 
+			//                               lower.size() = higher.size() + 1
+			//                               lower.size() = higher.size() - 1
+			higher.insert(key);
+			int yy = *higher.begin();
+			higher.erase(yy);
+			lower.insert(yy);
+		}
+
     }
     else if (lower.size() == higher.size() + 1)
     {
@@ -156,14 +149,7 @@ int MyStack::PeekMedian()
 
     if (lower.size() == higher.size())
     {
-        if (lower.size() == 0)
-        {
-            return -1;
-        }
-        else
-        {
-            return *lower.begin();
-        }
+        return *lower.begin();
     }
     else if (lower.size() + 1 == higher.size())
     {
@@ -179,7 +165,7 @@ int main()
 {
     int n = 0;
     scanf("%d", &n);
-    char keyword[20];
+    char keyword[50];
     int key;
     MyStack ms;
     for (int k = 0; k < n; ++k)
