@@ -155,7 +155,8 @@ int main()
 			ans += read4num(qian4wei) + " Wan";
 			if (hou4wei == "0000")
 			{
-				return ans;
+                cout << ans << endl;
+				return 0;
 			}
 			else
 			{
@@ -163,13 +164,84 @@ int main()
 				while (hou4wei[pos] == '0') pos++;
 				if (pos >= 1) ans += " ling";
 				ans += " " + read4num(hou4wei);
-				return ans;
+                cout << ans << endl;
+				return 0;
 			}
 		}
 	}
 	else if (s.size() <= 9)
 	{
-		
+        string ans;
+        string q4wei = s.substr(0, s.size() - 8);
+        string z4wei = s.substr(s.size() - 8, 4);
+        string h4wei = s.substr(s.size() - 4, 4);
+        if (q4wei == "0000" || q4wei == "000" || q4wei == "00" || q4wei == "0")
+        {
+            if (z4wei == "0000" && h4wei == "0000")
+            {
+                cout << "ling" << endl;
+                return 0;
+            }
+            else if (z4wei == "0000" && h4wei != "0000")
+            {
+                cout << read4num(h4wei) << endl;
+                return 0;
+            }
+            else if (z4wei != "0000" && h4wei == "0000")
+            {
+                cout << read4num(z4wei) << " Wan" << endl;
+                return 0;
+            }
+            else if (z4wei != "0000" && h4wei != "0000")
+            {
+                ans += read4num(z4wei) + " Wan";
+                int pos = 0; 
+                while (h4wei[pos] == '0') pos++;
+                if (pos >= 1) ans += " ling";
+                ans += " " + read4num(h4wei);
+                cout << ans << endl;
+                return 0;
+            }
+        }
+        else
+        {
+            while (q4wei.size() < 4) q4wei = "0" + q4wei;
+            ans += read4num(q4wei) + " Yi";
+            if (z4wei == "0000" && h4wei == "0000")
+            {
+                cout << ans << endl;
+                return 0;
+            }
+            else if (z4wei == "0000" && h4wei != "0000")
+            {
+                ans += " ling";
+                ans += " " + read4num(h4wei);
+                cout << ans << endl;
+                return 0;
+            }
+            else if (z4wei != "0000" && h4wei == "0000")
+            {
+                int pos = 0;
+                while (z4wei[pos] == '0') pos++;
+                if (pos >= 1) ans += " ling";
+                ans += " " + read4num(z4wei) + " Wan";
+                cout << ans << endl;
+                return 0;
+            }
+            else if (z4wei != "0000" && h4wei != "0000")
+            {
+                int pos1 = 0;
+                while (z4wei[pos1] == '0') pos1++;
+                if (pos1 >= 1) ans += " ling";
+                ans += " " + read4num(z4wei) + " Wan";
+                int pos2 = 0;
+                while (h4wei[pos2] == '0') pos2++;
+                if (pos2 >= 1) ans += " ling";
+                ans += " " + read4num(h4wei);
+                cout << ans << endl;
+                return 0;
+            }
+        }
 	}
 
 	
