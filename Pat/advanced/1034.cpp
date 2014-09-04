@@ -81,14 +81,13 @@ int main()
         weight = v[i].weight;
         root1 = Find(name1);
         root2 = Find(name2);
-        if (root1 != root2) Union(name1, name2);
+        if (root1 != root2) Union(root1, root2);
     }
 
     map<string, string>::iterator it;
     set<string> allparents;
     for (it = parent.begin(); it != parent.end(); ++it)
     {
-        //cout << it->first << " parent: " << it->second << endl;
         allparents.insert(it->second);
     }
 
@@ -136,3 +135,9 @@ int main()
     
     return 0;
 }
+
+/* 
+ * The case 4 sample not passed
+ * Why ??? 
+ * Still NOT figure it out
+ */
