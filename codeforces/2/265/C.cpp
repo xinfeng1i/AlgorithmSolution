@@ -33,6 +33,8 @@ bool IsTolerable(const string& s, int p)
 		}
 	}
 
+
+
 	int n = s.size();
 	for (int k = 2; k <= n; ++k)
 	{
@@ -60,17 +62,21 @@ string StrAddOne(const string& s, int p)
 		return ans;
 	}
 
-	for (int i = n-1; i >= 0; --i)
+	for (int i = n-1; i >= 1; --i)
 	{
 		if (ans[i] > maxChar)
 		{
 			ans[i] = 'a';
-			if (i-1 >= 0)
-			{
-				ans[i-1] += 1;
-			}
+			ans[i-1] += 1;
 		}
 	}
+	
+	if (ans[0] > maxChar)
+	{
+		ans[0] = 'a';
+		ans = "a" + ans;
+	}
+
 	return ans;
 }
 
@@ -88,7 +94,7 @@ int main()
 	do
 	{
 		ans = StrAddOne(s, p);
-		if (ans >= maxStr)
+		if (ans.size() > maxStr.size())
 		{
 			cout << "NO" << endl;
 			return 0;
