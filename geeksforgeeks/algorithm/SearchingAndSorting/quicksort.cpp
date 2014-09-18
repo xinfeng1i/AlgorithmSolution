@@ -41,7 +41,7 @@ int main()
 {
     // test for activity problem
 
-    int a[] = {1, 3, 2, 5, 7, 6};
+    int a[] = {2, 1};
     int n = sizeof(a) / sizeof(a[0]);
 
     printf("Before QuickSort:\n");
