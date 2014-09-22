@@ -7,6 +7,7 @@
 #include <utility>
 #include <algorithm>
 #include <functional>
+#include <cstdio>
 using namespace std;
 
 const int N = 100010;
@@ -15,6 +16,7 @@ map<string, pair<int, int> > cost;
 map<string, vector<string> > graph;
 map<string, vector<string> > rgraph;
 map<string, vector<string> > newgraph;
+map<string, pair<int, int> > newcost;
 set<string> newvertices;
 set<string> vertices;
 map<string, bool> visited;
@@ -23,7 +25,7 @@ vector<set<string> > allSCC;
 
 int m, n;
 
-string lowercase(string word)
+string lowercase(const string& word)
 {
 	string ans(word);
 	for (int i = 0; i < ans.size(); ++i)
@@ -36,7 +38,7 @@ string lowercase(string word)
 	return ans;
 }
 
-int countR(string word)
+int countR(const string& word)
 {
 	int cnt = 0;
 	for (size_t i = 0; i < word.size(); ++i)
@@ -49,7 +51,7 @@ int countR(string word)
 	return cnt;
 }
 
-bool InSameSCC(string x, string y)
+bool InSameSCC(const string& x, const string& y)
 {
 	for (size_t i = 0; i < allSCC.size(); ++i)
 	{
@@ -61,7 +63,7 @@ bool InSameSCC(string x, string y)
 	return false;
 }
 
-string representativeWordOfSCC(string x)
+string representativeWordOfSCC(const string& x)
 {
 	for (size_t i = 0; i < allSCC.size(); ++i)
 	{
@@ -79,9 +81,15 @@ pair<int, int> minPair(pair<int, int> x, pair<int, int> y)
 	{
 		return x;
 	}
-	else
+	else if (y.first < x.first)
 	{
 		return y;
+	}
+	else
+	{
+		if (x.second < y.second) return x;
+		else if (y.second < x.second) return y;
+		else return x;
 	}
 }
 
@@ -142,21 +150,38 @@ void PrintSCCs(vector<set<string> > &SCCs)
 
 pair<int, int> DFS(string u)
 {
-	if (visited[u]) return cost[u];
+	if (visited[u]) return newcost[u];
 
 	visited[u] = true;
-	pair<int, int> curminCost(cost[u]);
+	pair<int, int> curminCost(newcost[u]);
 	for (auto it = newgraph[u].begin(); it != newgraph[u].end(); ++it)
 	{
 		string v = *it;
 		curminCost = minPair(curminCost, DFS(v));
 	}
-	cost[u] = curminCost;
+	//cost[u] = curminCost;
+	newcost[u] = curminCost;
 	return curminCost;
+}
+
+void MyDFS(string u, pair<int, int>& curMinCost)
+{
+	visited[u] = true;
+	curMinCost = minPair(curMinCost, cost[u]);
+	for (auto it = newgraph[u].begin(); it != newgraph[u].end(); ++it)
+	{
+		string v = *it;
+		if (!visited[v])
+		{
+			MyDFS(v, curMinCost);
+		}
+	}
+	return;
 }
 
 int main()
 {
+	freopen("input.txt", "r", stdin);
 	cin >> m;
 	string word;
 	for (int i = 0; i < m; ++i)
@@ -255,6 +280,8 @@ int main()
 				newgraph[headU].push_back(headV);
 				newvertices.insert(headU);
 				newvertices.insert(headV);
+				newcost[headU] = cost[headU];
+				newcost[headV] = cost[headV];
 			}
 		}
 	}
@@ -273,23 +300,26 @@ int main()
 		if (!visited[*it])
 		{
 			pair<int, int> mincost =  DFS(*it);
+		}
+	}
 
-			// update all the cost in the same SCC
-			for (size_t i = 0; i < allSCC.size(); ++i)
+	for (auto it = newvertices.begin(); it != newvertices.end(); ++it)
+	{
+		string u = *it;
+		for (size_t i = 0; i < allSCC.size(); ++i)
+		{
+			if (allSCC[i].count(u) != 0)
 			{
-				if (allSCC[i].count(*it) != 0)
+				for (auto it2 = allSCC[i].begin(); it2 != allSCC[i].end(); ++it2)
 				{
-					for (auto it2 = allSCC[i].begin(); it2 != allSCC[i].end(); ++it2)
-					{
-						cost[*it2] = mincost;
-					}
+					cost[*it2] = newcost[u];
 				}
+				break;
 			}
 		}
 	}
 
 	//cout << "print ans" << endl;
-
 	int ansR = 0;
 	int anslen = 0;
 	for (size_t i = 0; i < essay.size(); ++i)
