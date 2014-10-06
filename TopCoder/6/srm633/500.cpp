@@ -2,23 +2,43 @@
 #include <vector>
 using namespace std;
 
+// Every time, the reachable points set is the ring with
+// radius in [a, b], very time we have a step length r, we
+// update the [a, b]
+// the maximum is always b + r;
+// the minimum depends the relaitonship between r and a, b
+// if  a > r; a = a - r;
+// a <= r && r < b; a = 0;
+// r > b; a = b - r;
 string ableToGet(int x, int y, vector<int> jumpLengths)
 {
-	if (jumpLengths.size() == 1)
+	int a = 0;
+	int b = 0;
+	for (size_t i = 0; i < jumpLengths.size(); ++i)
 	{
-		int d1 = x * x + y * y;
-		int d2 = jumpLengths[0];
-		if (d1 == d2) return "Able";
-		else return "Not able";
+		int r = jumpLengths[i];
+		if (r < a)
+		{
+			a = a - r;
+		}
+		else if (r <= b)
+		{
+			a = 0;
+		}
+		else if (r > b)
+		{
+			a = r - b;
+		}
+
+		b += r;
 	}
 
-	if (jumpLengths.size() == 2)
-	{
-		int d1 = x * x + y * y;
-		int d2 = jumpLengths[0] + jumpLengths[1];
-		if (d1 <= d2) return "Able";
-		else return "Nota able";
-	}
+	int dist = x * x + y * y;
+	if (dist >= a * a && dist <= b * b) return "Able";
+	else return "Not able";
+}
 
-
+int main()
+{
+	return 0;
 }
