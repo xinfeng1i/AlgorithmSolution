@@ -27,10 +27,10 @@ void rotation(int x, int y, int a, int b)
 	return;
 }
 
-bool FormSquare(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
+bool FormSquare(long long x1, long long y1, long long x2, long long y2, long long x3, long long y3, long long x4, long long y4)
 {
-	vector<int> dist;
-	int d;
+	vector<long long> dist;
+	long long d;
 	d = (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
 	dist.push_back(d);
 
@@ -61,7 +61,7 @@ bool FormSquare(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
 int main()
 {
 	//rotation(-1, 1, 0, 0);
-	//freopen("input.txt", "r", stdin);
+	//freopen("input.in", "r", stdin);
 	int n;
 	cin >> n;
 	for (int k = 0; k < n; ++k)
@@ -112,9 +112,11 @@ int main()
 						int x4 = v[3][j4].first;
 						int y4 = v[3][j4].second;
 						/*
-							if (j1 + j2 + j3 + j4 == 3) 
+							if (j1 + j2 + j3 + j4 == 8) 
 							{
+								cout << "The rotations times---" << endl;
 								cout << j1 << " " << j2 << " " << j3 << " " << j4 << endl;
+								cout << "The four points:---" << endl;
 								cout << x1 << " " << y1 << endl;
 								cout << x2 << " " << y2 << endl;
 								cout << x3 << " " << y3 << endl;
