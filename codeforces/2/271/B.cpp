@@ -5,6 +5,34 @@
 #include <iterator>
 using namespace std;
 
+int bsearch(const vector<int>& v, int q)
+{
+	int n = v.size();
+	int left = 0;
+	int right = n - 1;
+	int mid = (left + right) / 2;
+	while (left <= right)
+	{
+		mid = (left + right) / 2;
+		if (q == v[mid])
+		{
+			return mid;
+		}
+		else if (q > v[mid])
+		{
+			left = mid + 1;
+		}
+		else
+		{
+			if (mid - 1 < 0) return mid;
+			else if (q > v[mid-1]) return mid;
+			right = mid - 1;
+		}
+	}
+
+	return -1;
+}
+
 int main()
 {
 	int n;
@@ -30,14 +58,9 @@ int main()
 	for (int k = 0; k < m; ++k)
 	{
 		cin >> q;
-		for (int i = 0; i < n; ++i)
-		{
-			if (q <= v[i])
-			{
-				cout << i+1 << endl;
-				break;
-			}
-		}
+		//int ans = bsearch(v, q);
+		int ans = lower_bound(v.begin(), v.end(), q) - v.begin();
+		cout << ans + 1 << endl;
 	}
 	
 	return 0;
