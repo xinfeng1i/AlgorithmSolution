@@ -6,12 +6,14 @@ using namespace std;
 
 long long n, d;
 
+
 int main()
 {
+	ios_base::sync_with_stdio(false);
 	cin >> n >> d;
 
 	vector<long long> v(n);
-	vector<long long> dp(n+1, 1);
+	vector<long long> dp(n, 1);
 	vector<long long> prev(n, -1);
 
 	for (long long i = 0; i < n; ++i)
@@ -21,11 +23,11 @@ int main()
 	
 	for (long long i = 1; i < n; ++i)
 	{
-		for (long long j = 0; j < i; ++j)
+		// shorten the search range with 700, but why?
+		for (long long j = max(0LL, i-700); j < i; ++j)
 		{
 			if (abs(v[j] - v[i]) >= d)
 			{
-				//dp[i] = max(dp[i], dp[j]+1);
 				if (dp[j] + 1 > dp[i])
 				{
 					dp[i] = dp[j] + 1;
