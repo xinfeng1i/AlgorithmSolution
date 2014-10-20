@@ -2,7 +2,15 @@
 #include <vector>
 using namespace std;
 
-
+// Start in the leftmose column
+// 
+// If all queens are placed, return true
+// else for (every possible choice among the rows in this column)
+//          if the queue can be placed safely there,
+// 			make that choice and then recursively check if this choice lead a solution
+//          if successful, return true
+//          else, remove queue and try another choice in this colunm
+// if all rows have been tried and nothing worked, return false to trigger backtracking
 const int NUM_QUEUE = 4;
 const int BOARD_SIZE = 4;
 typedef vector<vector<int> > Grid;
