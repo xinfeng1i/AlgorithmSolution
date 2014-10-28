@@ -6,6 +6,15 @@
 #include <cstdio>
 using namespace std;
 
+// Base Case: if cannot find any empty cell, return true
+// Find an unsigned cell (x, y)
+// for digit from 1 to 9
+// 	   if there is not conflict for digit at (x, y)
+//     assign (x, y) as digit and Recursively check if this lead to a solution
+//     if success, return true
+//     else remove the digit at (x, y) and try another digit
+// if all digits have been tried and still have not worked out, return false to trigger backtracking
+
 const int GRID_SIZE = 9;
 const int SUB_GRID_SIZE = 3;
 typedef vector<vector<int> > Grid;
