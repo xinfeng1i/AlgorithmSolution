@@ -1,16 +1,38 @@
 # AlgorithmSolution
 Solutioins for all kinds of Algorithm Problems.
 
-## Main Websites
-* [Topcoder](www.topcoder.com)
-* [Codeforces](codeforces.com)
-* [ProjectEuler](https://projecteuler.net)
-* [LeetCode](https://oj.leetcode.com)
-* [Pat](pat.zju.edu.cn)
-* [geeksforgeeks](www.geeksforgeeks.org)
+## Main Online Judges or Algorithm Websites
+<table>
+<tr>
+  <th>Homework Index</th> <th>Main Task</th>
+</tr>
+<tr>
+  <td>1</td> <td>[Topcoder](www.topcoder.com)</td>
+</tr>
+<tr>
+  <td>2</td> <td>[Codeforces](codeforces.com)</td> 
+</tr>
+<tr>
+  <td>3</td> <td>[ProjectEuler](https://projecteuler.net)</td>
+</tr>
+<tr>
+  <td>4</td> <td>[LeetCode](https://oj.leetcode.com)</td>
+</tr>
+<tr>
+  <td>5</td> <td>[PAT](pat.zju.edu.cn)</td>
+</tr>
+<tr>
+  <td>6</td> <td>[geeksforgeeks](www.geeksforgeeks.org)</td>
+</tr>
+</table> 
 
-## Contact
-Xinfeng Li (silfer.lee@gmail.com)
+## Contributing
+* Keep the hierarchical structure clean and reasonable.
+* Name the solutions in a meaningful and consistent way.
+* Name more than one solution for a given problem with suffix 1, 2, 3...
+* Make your algorithm elegant and keep the code neat.
+* Pull request are welcomed.
+
 
 ## License (GNU AGPLv3)
 
