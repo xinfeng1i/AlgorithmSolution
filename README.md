@@ -28,9 +28,13 @@ Solutioins for all kinds of Algorithm Problems.
 
 ## Contributing
 * Keep the hierarchical structure clean and reasonable.
+
 * Name the solutions in a meaningful and consistent way.
+
 * Name more than one solution for a given problem with suffix 1, 2, 3...
+
 * Make your algorithm elegant and keep the code neat.
+
 * Pull request are welcomed.
 
 
