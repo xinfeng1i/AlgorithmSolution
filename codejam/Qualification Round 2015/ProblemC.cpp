@@ -124,3 +124,88 @@ int main()
 	return 0;
 }
 #endif //0
+
+#if 1
+typedef long long llong;
+
+int table[5][5] = { {0, 0, 0, 0, 0},
+	                {0, 1, 2, 3, 4},
+					{0, 2, -1, 4, -3},
+					{0, 3, -4, -1, 2},
+					{0, 4, 3, -2, -1} };
+
+int Char2Int(char ch)
+{
+	if (ch == '1') return 1;
+	else if (ch == 'i') return 2;
+	else if (ch == 'j') return 3;
+	else if (ch == 'k') return 4;
+}
+
+int MultiplyAB(int a, int b)
+{
+	int sign = 1;
+	if (a * b < 0) sign = -1;
+	return sign * table[abs(a)][abs(b)];
+}
+
+int MyPower(int a, llong n)
+{
+	if (n == 1) return a;
+	else if (n % 2 == 0) return MyPower(MultiplyAB(a, a), n / 2);
+	else if (n % 2 != 0) return MultiplyAB(a, MyPower(MultiplyAB(a, a), (n - 1)/2));
+}
+
+bool MultiplyAll(llong L, llong X, string s)
+{
+	int ans = 1;
+	for (llong i = 0; i < L; ++i)
+	{
+		ans = MultiplyAB(ans, Char2Int(s[i]));
+	}
+	ans = MyPower(ans, X);
+	return ans == -1;
+}
+
+bool ConstructFirstTwoSubString(llong L, llong X, string s)
+{
+	int value_i = 1;
+	int value_j = 1;
+	llong repeated_times = min(8LL, X);
+	for (llong i = 0; i < repeated_times * L; ++i)
+	{
+		if (value_i != 2)
+		{
+			value_i = MultiplyAB(value_i, Char2Int(s[i % L]));
+		}
+		else if (value_j != 3)
+		{
+			value_j = MultiplyAB(value_j, Char2Int(s[i % L]));
+		}
+	}
+	return value_i == 2 && value_j == 3;
+}
+
+int main()
+{
+	freopen("C-large-practice.in", "r", stdin);
+	freopen("C-large-practice.out", "w", stdout);
+	int T = 0;
+	cin >> T;
+	for (int nCase = 1; nCase <= T; ++nCase)
+	{
+		llong L, X;
+		string s;
+		cin >> L >> X;
+		cin >> s;
+
+		bool ok1 = MultiplyAll(L, X, s);
+		bool ok2 = ConstructFirstTwoSubString(L, X, s);
+
+		cout << "Case #" << nCase << ": ";
+		if (ok1 && ok2) cout << "YES" << endl;
+		else cout << "NO" << endl;
+	}
+	return 0;
+}
+#endif //0
