@@ -78,3 +78,44 @@ int main()
 	return 0;
 }
 #endif //0
+
+/** 
+ * Office solution: greedy algorithm
+ * you can always invite friends with shy level 0, since
+ * if you can invite other people with shy level k (k > 0)
+ * to make sure all people stand out, then you can replace these
+ * people with shy level 0, the solution will also succeed.
+ */
+#if 0
+int main()
+{
+	freopen("data.in", "r", stdin);
+	//freopen("A-large.out", "w", stdout);
+	int T = 0;
+	cin >> T;
+	for (int nCase = 1; nCase <= T; ++nCase)
+	{
+		int smax = 0;
+		string shyArray;
+		cin >> smax >> shyArray;
+		
+		// current stand people
+		int standPeople = 0;
+		int minInvite = 0;
+		for (int k = 0; k <= smax; ++k)
+		{
+			// if you want shy level k people to stand, you must
+			// have at least k people stand, since there already be
+			// standPeople stand out, therefore, you need at least
+			// k - standPeople to invite to make sure this level people
+			// can stand
+			minInvite = max(k - standPeople, 0);
+			standPeople += shyArray[k] - '0';
+		}
+
+		cout << "Case #" << nCase << ": " << minInvite << endl;
+	}
+	return 0;
+
+}
+#endif //0
