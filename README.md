@@ -46,7 +46,7 @@ Solutioins for all kinds of Algorithm Problems.
 
 ## License (GNU AGPLv3)
 
-Copyright (c) 2012-2014 Xinfeng Li
+Copyright (c) 2012-2015 Xinfeng Li
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
