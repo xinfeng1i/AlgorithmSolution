@@ -24,6 +24,9 @@ Solutioins for all kinds of Algorithm Problems.
 <tr>
   <td>6</td> <td><a href = www.geeksforgeeks.org>geeksforgeeks</a></td>
 </tr>
+<tr>
+  <td>7</td> <td><a href = http://hihocoder.com>geeksforgeeks</a></td>
+</tr>
 </table> 
 
 ## Contributing
