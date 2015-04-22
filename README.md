@@ -25,7 +25,7 @@ Solutioins for all kinds of Algorithm Problems.
   <td>6</td> <td><a href = www.geeksforgeeks.org>geeksforgeeks</a></td>
 </tr>
 <tr>
-  <td>7</td> <td><a href = http://hihocoder.com>geeksforgeeks</a></td>
+  <td>7</td> <td><a href = http://hihocoder.com>hihoCoder</a></td>
 </tr>
 </table> 
 
