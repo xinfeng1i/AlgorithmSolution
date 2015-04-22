@@ -13,7 +13,7 @@ Solutioins for all kinds of Algorithm Problems.
   <td>2</td> <td><a href = codeforces.com>Codeforces</a></td> 
 </tr>
 <tr>
-  <td>3</td> <td><a href = https://code.google.com/codejam>Goolge Code jam</a></td> 
+  <td>3</td> <td><a href = https://code.google.com/codejam>Google Code jam</a></td> 
 </tr>
 <tr>
   <td>4</td> <td><a href = https://projecteuler.net>ProjectEuler</a></td>
