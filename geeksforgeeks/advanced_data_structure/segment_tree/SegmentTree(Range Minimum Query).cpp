@@ -27,7 +27,11 @@ int BuildTreeUtil(int* A, int left, int right, int* st, int idx)
 
 int* BuildTree(int* A, int n)
 {
-	int* st = new int[2 * n];
+    // there has 2n-1 node, but the idx not continues from [0, 2n-1]
+    // the size will be 2 * pow(2, ceil(log2(n))) - 1
+    int h = (int)ceil(log2(n));
+    int maxsize = 2 * (int)pow(2, h) - 1;
+	int* st = new int[maxsize];   
 	BuildTreeUtil(A, 0, n - 1, st, 0);
 	return st;
 }
