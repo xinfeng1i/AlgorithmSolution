@@ -1,33 +1,39 @@
 #include <iostream>
 #include <vector>
+#include <stack>
+#include <queue>
+#include <unordered_map>
+#include <map>
+#include <set>
+#include <unordered_set>
 #include <string>
 #include <algorithm>
+#include <utility>
+#include <numeric>
+#include <stdio.h>
+#include <stdlib.h>
 using namespace std;
 
-// Dynamic problem:
-// for current house, there are only two choice:
-// rob it or not rob it
-// if rob it, then the previous must not be robbed, so the money
-// is dp[i-2] + nums[i];
-// else not rob it, so the money is the money got till previous
-// house, is dp[i-1]
-// so dp[i] = max{dp[i-2] + nums[i], dp[i-1]}
+// 动态规划：
+// 定义 dp[n] = 到第n个房子能抢到的最大财富同时不引起警报
+// 最后一个房子有两种选择：
+// 1. 抢；在这种情况下，前一个房子必然不能被抢, 总财富=dp[n-2] + A[n]
+// 2. 不抢；在这种情况下，实际上就是抢n-1房子的财富，即dp[n-1]
+// 综上: dp[n] = max(dp[n-1], dp[n-2]+A[n])
 int rob(vector<int>& nums) {
-    int n = nums.size();
-    vector<int> dp(n, 0);
-    dp[0] = nums[0];
-    
-    for (int j = 1; j < n; ++j) {
-        if (j - 2 >= 0) {
-            dp[j] = max(dp[j-2] + a[j], dp[j-1]);
-        } else {
-            dp[j] = max(dp[j-1], a[j]);
-        }
-    }
-    
-    int maxVal = 0;
-    for (int j = 0; j < n; ++j) {
-        if (dp[j] > maxVal) maxVal = dp[j];
-    }
-    return maxVal;
+	int n = (int)nums.size();
+	if (n == 0) return 0;
+	
+	vector<int> dp(nums.begin(), nums.end());
+	for (int i = 0; i < n; ++i) {
+		if (i == 0) {
+			dp[i] = nums[i];
+		} else if (i == 1) {
+			dp[i] = max(nums[0], nums[1]);
+		} else if (i >= 2) {
+			dp[i] = max(dp[i-1], dp[i-2]+nums[i]);
+		}
+	}
+
+	return dp[n-1];
 }
