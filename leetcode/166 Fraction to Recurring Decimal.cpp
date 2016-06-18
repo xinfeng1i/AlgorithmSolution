@@ -19,70 +19,39 @@ using namespace std;
 
 string fractionToDecimal(int a, int b) {
 	if (b == 0) return "";
-	int flag = (a * b >= 0) ? 1 : -1;
-	long long x = abs(long long (a));
-	long long y = abs(long long (b));
-	if (x % y == 0) {
-		return to_string(x/y);
-	} else {
-		long long zhengPart = x / y;
-
-		size_t idx = 0;
-		vector<pair<long long, string>> v;
-		x = x % y;
-		while (x != 0) {
-			bool found = false;
-			for (size_t i = 0; i < v.size(); ++i) {
-				if (v[i].first == x) {
-					idx = i;
-					found = true;
-					break;
-				}
-			}
-			// has found the loop position
-			if (found) {
-				string ans = "";
-				ans += to_string(zhengPart);
-				ans += ".";
-				for (size_t i = 0; i < v.size(); ++i) {
-					if (i == idx) {
-						ans += "(";
-					}
-					ans += v[i].second;
-					if (i + 1 == v.size()) {
-						ans += ")";
-					}
-				}
-				if (flag == -1) {
-					ans = "-" + ans;
-				}
-				return ans;
-			}
-
-
-			string temp = "";
-			temp += to_string(x/y);
-			v.push_back(make_pair(x, temp));
-			x *= 10;
-			x %= y;
-		}
-		string ans = "";
-		ans += to_string(zhengPart);
+	int flag = (static_cast<long long>(a) * static_cast<long long>(b) >= 0) ? 1 : -1;
+	long long x = abs((long long) (a));
+	long long y = abs((long long) (b));
+	string ans;
+	ans = to_string(x/y); // int part
+	if (x % y != 0) {     // if remainder != 0, we have decimal parts
 		ans += ".";
-		for (size_t i = 0; i < v.size(); ++i) {
-			ans += v[i].second;
+		x = x % y;
+		unordered_map<long long, size_t> tb;	
+		while (x != 0) {	              // remainder is not equal to zeros
+			if (tb.find(x) != tb.end()) { // whether the remainder has ocuured before
+				ans.insert(tb[x], "(");   // if it is, we have found the recurring decimal
+				ans.push_back(')');
+				break;
+			}
+			
+			tb[x] = ans.size();           // if it is not, remember the position where it is
+			x *= 10;                      // remainder *= 10
+			ans += to_string(x/y);        // push_back (remainder / y)
+			x %= y;                       // update remainder %= y as new remainder
 		}
-		if (flag == -1) {
-			ans = "-" + ans;
-		}
-		return ans;
+
 	}
+	if (flag == -1) {
+		ans = "-" + ans;
+	}
+	return ans;
 }
 
 int main()
 {
-	int a = 1;
-	int b = 90;
+	int a = -2147483648;
+	int b = 1;
 	cout << fractionToDecimal(a, b) << endl;
 	return 0;
 }
