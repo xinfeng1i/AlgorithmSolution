@@ -1,7 +1,11 @@
 *.txt
 *.out
 *.o
+leetcode_java/.idea/
+leetcode_java/out/
+leetcode_java/solution/solution.iml
 <<<<<<< HEAD
 *.exe
 =======
 >>>>>>> abc
+
