@@ -11,6 +11,7 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <stack>
 #include <algorithm>
 #include <utility>
 using namespace std;
@@ -93,13 +94,94 @@ int trapRainWater2(vector<int> &heights) {
     return ans;
 }
 
-#if 1
+
+/*
+ * Method 3: 单调栈，这种方法相当于是逐层填水的方式
+ *
+ * 维护一个单调栈，判断当前高度与栈顶元素的大小，如果栈为空或者比栈顶元素小则入栈（栈内保持单调递减）；
+ * 否则，则出栈元素，且当前元素与新的栈顶元素形成的区间，为填水的区间，填水量为区间（较低端高度-出栈元素高度）* 宽度
+ * 不断出栈计算，知道栈顶元素大于当前元素，则继续入栈。
+ *
+ * 时间复杂度：O(n)
+ * 空间复杂度：O(n)
+ *
+ */
+int trapRainWater3(vector<int> &heights) {
+    if (heights.size() <= 2) return 0;
+    int ans = 0;
+    
+    stack<int> indexStack;
+    int i = 0;
+    int n = (int) heights.size();
+    while (i < n) {
+        while (!indexStack.empty() && heights[indexStack.top()] <= heights[i]) {
+            int toFillIndex = indexStack.top();
+            indexStack.pop();
+            // printf("i = %d, fillIndex = %d\n", i, toFillIndex);
+            
+            if (indexStack.empty()) break;
+            int width = i - indexStack.top() - 1;
+            int fillHeight = min(heights[indexStack.top()], heights[i]) - heights[toFillIndex];
+            
+            // printf("    width = %d, fillHeight = %d, water = %d\n", width, fillHeight, width * fillHeight);
+            ans += fillHeight * width;
+        }
+        indexStack.push(i);
+        i++;
+    }
+    return ans;
+}
+
+/*
+ * Method 4: 左右挡板法
+ *
+ * 该方法其实与方法2类似，基本思想是：水位是由左右挡板中较低的挡板决定的。因此，在遍历过程中比较左右挡板的高度，
+ * 如果左侧挡板较低，则左指针不断累积 water，直到遇到更高的左侧挡板；否则，右指针不断累积 water，直到遇到更高
+ * 的右侧挡板.
+ *
+ * 时间复杂度：O(n)
+ * 空间复杂度：O(1)
+ */
+int trapRainWater4(vector<int> &heights) {
+    if (heights.size() <= 2) return 0;
+    
+    int ans = 0;
+    
+    int n = (int) heights.size();
+    int i = 0;
+    int j = n - 1;
+    int max_left = 0;
+    int max_right = 0;
+    while (i < j) {
+        if (max_left <= max_right) {
+            if (heights[i] <= max_left) {
+                ans += max_left - heights[i];
+                i++;
+            } else {
+                max_left = max(max_left, heights[i]);
+            }
+        } else {
+            if (heights[j] <= max_right) {
+                ans += max_right - heights[j];
+                j--;
+            } else {
+                max_right = max(max_right, heights[j]);
+            }
+        }
+    }
+    
+    return ans;
+}
+
+
+
+#if 0
 int main() {
     vector<int> heights = {0,1,0,2,1,0,1,3,2,1,2,1};      // expected answer: 6
     // vector<int> heights = {100,50,99,50,100,50,99,50,100,50};   // expected answer: 202
     
-    int result = trapRainWater2(heights);  // expected answer: 6
-    printf("water = %d\n", result);
+    int result = trapRainWater4(heights);  // expected answer: 6
+    printf("answer water = %d\n", result);
     
     return 0;
 }
