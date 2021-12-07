@@ -79,6 +79,33 @@ vector<vector<int>> levelOrder(TreeNode* root) {
 }
 
 
+vector<vector<int>> levelOrderMethod2(TreeNode* root) {
+   // base case
+   vector<vector<int>> ans;
+   if (root == NULL) return ans;
+
+   queue<TreeNode*> q;
+   q.push(root);
+   while(!q.empty()) {
+       // iterate current level
+       int sz = q.size();
+       vector<int> temp;
+       for (int i = 0; i < sz; ++i) {
+           TreeNode* node = q.front();
+           temp.push_back(node->val);
+           q.pop();
+
+           // push children(next level) to queue
+           if (node->left != NULL) q.push(node->left);
+           if (node->right != NULL) q.push(node->right);
+       }
+       ans.push_back(temp);
+   }
+
+   return ans;
+}
+
+
 #if 0
 int main() {
     TreeNode* root = new TreeNode(1);
