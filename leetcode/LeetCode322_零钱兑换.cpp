@@ -1,61 +1,71 @@
+#include <cstdio>
 #include <climits>
-#include <cassert>
 #include <vector>
-#include <set>
-#include <unordered_set>
-#include <map>
-#include <unordered_map>
 #include <algorithm>
-#include <utility>
+#include <string>
 #include <iostream>
 using namespace std;
 
-/*
- * ×´Ì¬¶¨Òå£ºdp[amount]±íÊ¾´Õ³ÉamountĞèÒªµÄ×îÉÙÓ²±Ò
- * ×´Ì¬×ªÒÆ£ºdp[amount] = dp[amount-some_coin] + 1 for all some_coin
- * ³õÊ¼×´Ì¬£ºdp[some_coin] = 1
- * ×¢Òâ£º±ß½çÌõ¼ş£º³õÊ¼»¯Ê±ºòsome_coin¿ÉÄÜ»á´óÓÚamountµ¼ÖÂ¶ÑÕ»Òç³ö
- * Ê±¼ä¸´ÔÓ¶È£ºO(amount * n)
- * ¿Õ¼ä¸´ÔÓ¶È£ºO(amount)
- */
+// dp[i][j]: ç”¨å‰iä¸ªç‰©å“å‡‘æˆjæ‰€éœ€è¦çš„æœ€å°‘ç‰©å“ä¸ªæ•°ï¼Œåˆ™ç›®æ ‡ä¸ºæ±‚ dp[n][amount]
+// base case:
+//   dp[0][j] = -1
+//   dp[i][0] = 0
+// state tranfer:
+//   not using ith: dp[i-1][j]
+//   using ith:     dp[i][j-coins_i] + 1
+//
+// Time: O(n * amount)
+// space: O(n * amount), can be further optimized to O(amount)
 int coinChange(vector<int>& coins, int amount) {
-    if (amount == 0) return 0;
-    if (coins.empty()) return -1;
-
-    int n = (int)coins.size();
-    vector<int> dp(amount + 1, 0);
-    for (int i = 0; i < n; ++i) {
-        if (coins[i] <= amount) {
-            dp[coins[i]] = 1;
-        }
-    }
-
-    for (int i = 1; i <= amount; ++i) {
-        if (dp[i] != 0) continue;
-        bool found = false;
-        int minNum = INT_MAX;
-        for (int j = 0; j < n; ++j) {
-            int coin = coins[j];
-            if (i >= coin && dp[i-coin] >= 0) {
-                found = true;
-                minNum = min(dp[i - coin] + 1, minNum);
+    int n = int (coins.size());
+    
+    vector<vector<int>> dp(n + 1, vector<int>(amount + 1, -1));
+    for (int j = 1; j <= amount; ++j) dp[0][j] = -1;
+    for (int i = 0; i <= n; ++i) dp[i][0] = 0;
+    
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j <= amount; ++j) {
+            if (j < coins[i - 1]) {
+                dp[i][j] = dp[i-1][j];
+            } else {
+                int totCnt = INT_MAX;
+                
+                // not using ith coin
+                int cnt1 = dp[i-1][j];
+                if (cnt1 != -1) {
+                    totCnt = min(totCnt, cnt1);
+                }
+                // using ith coin
+                int prevCnt = dp[i][j-coins[i-1]];
+                if (prevCnt != -1) {
+                    totCnt = min(totCnt, prevCnt + 1);
+                }
+                
+                dp[i][j] = totCnt == INT_MAX ? -1: totCnt;
             }
         }
-
-        if (found) dp[i] = minNum;
-        else dp[i] = -1;
     }
-
-    for (int i = 1; i <= amount; ++i) {
-        cout << i << ": " << dp[i] << endl;
-    }
-
-    return dp[amount];
+    
+    return dp[n][amount];
 }
 
+
 int main() {
-    vector<int> coins = {2};
-    int amount = 1;
-    cout << coinChange(coins, amount) << endl;
+    vector<int> v1 = { 1, 2, 5 };
+    int n1 = 11;
+    cout << "case 1: " << endl;
+    cout << coinChange(v1, n1) << endl;
+    
+    
+    vector<int> v2 = { 2 };
+    int n2 = 3;
+    cout << "case 2: " << endl;
+    cout << coinChange(v2, n2) << endl;
+    
+    vector<int> v3 = { 1 };
+    int n3 = 0;
+    cout << "case 3: " << endl;
+    cout << coinChange(v3, n3) << endl;
+    
     return 0;
 }
