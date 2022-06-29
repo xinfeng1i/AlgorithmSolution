@@ -90,6 +90,12 @@ bool solveSudoku(Grid& grid, int row, int col) {
     return false;
 }
 
+
+void solveSudoku(vector<vector<char>>& grid) {
+    pair<int, int> p = getNextEmptyPos(grid);
+    solveSudoku(grid, p.first, p.second);
+}
+
 void printGrid(const vector<vector<char>>& grid) {
     int n = (int)grid.size();
     
@@ -137,12 +143,10 @@ int main() {
     cout << "before find:" << endl;
     printGrid(grid);
     
-    pair<int, int> p = getNextEmptyPos(grid);
-    bool ok = solveSudoku(grid, p.first, p.second);
-    if (ok) {
-        cout << "we found a solution" << endl;
-        printGrid(grid);
-    }
+    
+    solveSudoku(grid);
+    cout << "after solve: " << endl;
+    printGrid(grid);
     
     return 0;
 }
