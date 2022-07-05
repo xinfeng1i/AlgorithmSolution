@@ -17,6 +17,8 @@
 #include <cassert>
 using namespace std;
 
+const vector<int> dx = { -1, 0, 1,  0 };
+const vector<int> dy = { 0,  1, 0, -1 };
 
 vector<pair<int, int>> getFirstCharCandidate(vector<vector<char>>& grid, string& word) {
     assert(!word.empty());
@@ -46,39 +48,38 @@ void printGrid(const vector<vector<int>>& visited) {
     }
 }
 
-
-bool solveWordSearch(vector<vector<char>>& grid, vector<vector<int>>& visited, string& word, int startRow, int startCol, int idx) {
+/**
+ *  检查从(i,j)开始是否可以搜索到word[idx...n]单词
+ *  假设单词的长度为L，则时间复杂度为：
+ *  时间复杂度：O((4^L)/3)
+ */
+bool solveWordSearch(vector<vector<char>>& grid, vector<vector<int>>& visited, string& word, int i, int j, int idx) {
     int sz = (int) word.size();
     if (idx == sz - 1) {
-        bool flag = grid[startRow][startCol] == word[idx];
-        if (flag) {
-            visited[startRow][startCol] = 1;
-        }
-        return flag;
+        return grid[i][j] == word[idx];
     }
     
-    char thisChar = word[idx];
-    if (thisChar != grid[startRow][startCol]) return false;
+    if (word[idx] != grid[i][j]) return false;
     
     int m = (int) grid.size();
     int n = (int) grid[0].size();
-    visited[startRow][startCol] = 1;
-    vector<int> dx = { -1, 0, 1,  0 };
-    vector<int> dy = { 0,  1, 0, -1 };
-    for (int i = 0; i < 4; ++i) {
-        int newRow = startRow + dx[i];
-        int newCol = startCol + dy[i];
+    visited[i][j] = 1;
+    for (int d = 0; d < 4; ++d) {
+        int newRow = i + dx[d];
+        int newCol = j + dy[d];
         if (newRow >= 0 && newRow < m && newCol >= 0 && newCol < n && visited[newRow][newCol] == 0) {
             bool ok = solveWordSearch(grid, visited, word, newRow, newCol, idx+1);
             if (ok) return true;
         }
     }
-    
-    visited[startRow][startCol] = 0;
+    visited[i][j] = 0;
     return false;
 }
 
-
+/**
+ * 由于每个grid都要执行一次search操作，因此总时间复杂度为：O(MN*4^L)
+ * 其中M为grid的行数，N为grid的列数，L为待搜索单词的长度.
+ */
 bool exist(vector<vector<char>>& board, string word) {
     int m = (int) board.size();
     int n = (int) board[0].size();
