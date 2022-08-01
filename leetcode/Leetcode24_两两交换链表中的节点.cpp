@@ -74,7 +74,7 @@ ListNode* mergeTwoListAlternativelyUtils(ListNode* h1, ListNode* h2) {
 
 
 /*
- * Swap adjacent nodes
+ * Method1: Swap adjacent nodes
  *
  * Time: O(n)
  * Space: O(1)
@@ -116,8 +116,49 @@ ListNode* swapPairs(ListNode* head) {
     return result;
 }
 
+/*
+ * Method2: Swap adjacent nodes
+ *
+ * Time: O(n)
+ * Space: O(1)
+ */
+ListNode* swapPairsII(ListNode* head) {
+    ListNode* pDummy = new ListNode(-1);
+    ListNode* pLast = pDummy;
+    
+    ListNode* p = head;
+    ListNode* q1 = NULL;
+    ListNode* q2 = NULL;
+    while (true) {
+        if (p == NULL || p->next == NULL) {
+            break;
+        }
+        
+        // remember the two adjacent nodes to be swapped
+        q1 = p;
+        q2 = p->next;
+        ListNode* pNextGroup = q2->next;
+        
+        // reverse the two nodes
+        q2->next = q1;
+        q1->next = NULL;
+        
+        // append the nodes to result
+        pLast->next = q2;
+        pLast = q1;
+        
+        // move to next iteration
+        p = pNextGroup;
+    }
+    
+    if (p != NULL) {
+        pLast->next = p;
+    }
+    
+    return pDummy->next;
+}
 
-
+#if 1
 int main() {
     ListNode* h = new ListNode(1);
     h->next = new ListNode(2);
@@ -125,7 +166,7 @@ int main() {
     h->next->next->next = new ListNode(4);
     h->next->next->next->next = new ListNode(5);
     
-    ListNode* result = swapPairs(h);
+    ListNode* result = swapPairsII(h);
     
     ListNode* p = result;
     while (p != NULL) {
@@ -136,3 +177,4 @@ int main() {
     
     return 0;
 }
+#endif // 0
