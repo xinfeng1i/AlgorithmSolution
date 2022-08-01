@@ -41,7 +41,7 @@ ListNode* reverseListUtil(ListNode* head) {
 }
 
 
-ListNode* reverseEveryKNodes(ListNode* head, int k) {
+ListNode* reverseKGroup(ListNode* head, int k) {
     if (head == NULL) return NULL;
     if (k == 1) return head;
     
@@ -99,7 +99,7 @@ int main() {
     
     int k = 5;
     
-    ListNode* result = reverseEveryKNodes(h, k);
+    ListNode* result = reverseKGroup(h, k);
     
     ListNode* p = result;
     while (p != NULL) {
